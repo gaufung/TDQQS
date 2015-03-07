@@ -1,0 +1,46 @@
+﻿<Window x:Class="TdqqClient.Views.SelectFeatureWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+        xmlns:commands="clr-namespace:TdqqClient.Commands"
+        Title="选择要素类" Height="220" Width="300" WindowStyle="None" 
+        ResizeMode="NoResize" WindowStartupLocation="CenterScreen"
+        Background="Transparent" AllowsTransparency="True">
+    <Window.Resources>
+        <ResourceDictionary Source="/Resources/DictionaryStyle.xaml"> 
+        </ResourceDictionary>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="25"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Border CornerRadius="10" Grid.RowSpan="2">
+            <Border.Background>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                    <GradientStop Color="LightGray" Offset="0.1"/>
+                    <GradientStop Color="DarkGray" Offset="0.9"/>
+                </LinearGradientBrush>
+            </Border.Background>
+        </Border>
+        <Image Source="/Resources\Images\Error.png"  HorizontalAlignment="Right" 
+               Margin="3" Grid.Row="0" Cursor="Hand" >
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="MouseLeftButtonDown">
+                    <!--★★★扩展的InvokeCommandAction★★★-->
+                    <commands:ExInvokeCommandAction 
+						Command="{Binding MouseLeftButtonDownCommand}" />
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+       </Image>
+        <StackPanel  HorizontalAlignment="Center" Orientation="Vertical" Grid.Row="1">
+            <TextBlock Text="{Binding Caption}" Grid.Row="1" HorizontalAlignment="Center" 
+                   FontSize="19" VerticalAlignment="Top" Margin="0,20,0,0"/>
+            <ComboBox Grid.Row="2" HorizontalAlignment="Center" Width="200" Height="25" Margin="0,5,0,0" 
+                      SelectedItem="{Binding Path=SelectFeature,Mode=TwoWay}" ItemsSource="{Binding ListFeautrues}">
+            </ComboBox>
+            <Button Style="{StaticResource RadioButton}" Height="50" Width="50" HorizontalAlignment="Center" Margin="0,10,0,0" Content="确定"
+                    FontSize="18"  FontWeight="Bold" Cursor="Hand" Command="{Binding ConfirmCommand}"/>
+        </StackPanel>       
+    </Grid>
+</Window>

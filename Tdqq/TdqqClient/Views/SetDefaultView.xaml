@@ -1,0 +1,89 @@
+﻿<Window x:Class="TdqqClient.Views.SetDefaultView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+        xmlns:commands="clr-namespace:TdqqClient.Commands"
+        Title="SetDefaultView"  WindowStartupLocation="CenterScreen" WindowStyle="None" ResizeMode="NoResize"
+        Background="Transparent" AllowsTransparency="True" Height="400" Width="600" >
+    <Window.Resources>
+        <ResourceDictionary Source="/Resources/DictionaryStyle.xaml">
+        </ResourceDictionary>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0.6*"/>
+            <RowDefinition Height="1.3*"/>
+            <RowDefinition Height="1.2*"/>
+            <RowDefinition Height="1.2*"/>
+            <RowDefinition Height="1.2*"/>
+            <RowDefinition Height="1.2*"/>
+        </Grid.RowDefinitions>
+        <Border Grid.Row="0" Grid.RowSpan="6" Background="#CFCFCF" CornerRadius="5" BorderBrush="Black"/>
+        <Image Source="/Resources\Images\Error.png"  HorizontalAlignment="Right" 
+               Margin="3" Grid.Row="0" Cursor="Hand" >
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="MouseLeftButtonDown">
+                    <!--★★★扩展的InvokeCommandAction★★★-->
+                    <commands:ExInvokeCommandAction 
+						Command="{Binding MouseLeftButtonDownCommand}" />
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+        </Image>
+        <Label Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Content="字段设置" FontSize="22"/>
+        <StackPanel Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Center" Orientation="Horizontal">
+            <Label Content="指界人姓名:" FontSize="18"/>
+            <TextBox Width="120" Margin="5,0,0,0" Text="{Binding Zjrxm}"/>
+        </StackPanel>
+        <Grid Grid.Row="3">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <StackPanel Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center">
+                <Label Content="土地利用类型" HorizontalAlignment="Center"/>
+                <ComboBox Width="Auto" SelectedItem="{Binding Path=Tdlylx,Mode=TwoWay}"
+                          ItemsSource="{Binding TdlylxList}" DisplayMemberPath="Entity" SelectedValue="Code" SelectedIndex="1"/>
+            </StackPanel>
+            <StackPanel Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center">
+                <Label Content="承包经营权取得方式" HorizontalAlignment="Center"/>
+                <ComboBox Width="Auto" SelectedItem="{Binding Path=Cbjyqqdfs,Mode=TwoWay}"
+                          ItemsSource="{Binding CbjyqqdfsList}" DisplayMemberPath="Entity" SelectedValue="Code" SelectedIndex="1"/>
+            </StackPanel>
+            <StackPanel Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Center">
+                <Label Content="所有权性质" HorizontalAlignment="Center"/>
+                <ComboBox Width="Auto" SelectedItem="{Binding Path=Syqxz,Mode=TwoWay}"
+                          ItemsSource="{Binding SyqxzList}" DisplayMemberPath="Entity" SelectedValue="Code" SelectedIndex="3"/>
+            </StackPanel>
+        </Grid>
+        <Grid Grid.Row="4">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <StackPanel Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center">
+                <Label Content="土地用途" HorizontalAlignment="Center"/>
+                <ComboBox Width="Auto" SelectedItem="{Binding Path=Tdyt,Mode=TwoWay}"
+                          ItemsSource="{Binding TdytList}" DisplayMemberPath="Entity" SelectedValue="Code" SelectedIndex="0"/>
+            </StackPanel>
+            <StackPanel Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center">
+                <Label Content="地力等级" HorizontalAlignment="Center"/>
+                <ComboBox Width="Auto" SelectedItem="{Binding Path=Dldj,Mode=TwoWay}"
+                          ItemsSource="{Binding DldjList}" DisplayMemberPath="Entity" SelectedValue="Code" SelectedIndex="0"/>
+            </StackPanel>
+            <StackPanel Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Center">
+                <Label Content="是否基本农田" HorizontalAlignment="Center"/>
+                <ComboBox Width="Auto" SelectedItem="{Binding Path=Sfjbnt,Mode=TwoWay}"
+                          ItemsSource="{Binding SfjbntList}" DisplayMemberPath="Entity" SelectedValue="Code" SelectedIndex="0"/>
+            </StackPanel>
+            <StackPanel Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Center">
+                <Label Content="地块类别" HorizontalAlignment="Center"/>
+                <ComboBox Width="Auto" SelectedItem="{Binding Path=Dklb,Mode=TwoWay}"
+                          ItemsSource="{Binding DklbList}" DisplayMemberPath="Entity" SelectedValue="Code" SelectedIndex="0"/>
+            </StackPanel>
+        </Grid>
+        <Button Style="{StaticResource RadioButton}" Grid.Row="5" Height="50" Width="50" Content="确定" Command="{Binding ConfirmCommand}" Cursor="Hand"/>
+    </Grid>
+</Window>
