@@ -78,7 +78,8 @@ namespace TdqqClient.ViewModels
         {
             _personDatabse = personDatabase;
             this.Caption = "请选择地块要素类";
-            ListFeautrues = AeHelper.GetAllFeautureClass(_personDatabse);
+            IAeFactory pAeFactory=new PersonalGeoDatabase(_personDatabse);
+            ListFeautrues = pAeFactory.OpenWorkspace().FeatrueClassNames();
             InitCommand();
         }
     }

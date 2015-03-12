@@ -1,8 +1,90 @@
 ﻿<Window x:Class="TdqqClient.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="MainWindow" Height="350" Width="525">
+        xmlns:fluent="clr-namespace:Fluent;assembly=Fluent"
+        WindowStartupLocation="CenterScreen" WindowState="Maximized" Background="#FFEBEDF0"
+        Icon="/Resources/globe.ico">
     <Grid>
-        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <fluent:Ribbon Grid.Row="0">
+            <fluent:RibbonTabItem ReduceOrder="(P),(P),(P),(P),(P)" Header="数据" FontSize="15">
+                <fluent:RibbonGroupBox x:Name="Default" Header="打开">
+                    <fluent:Button Text="打开地图" LargeIcon="Resources\Images\open-alt.png" Command="{Binding OpenDatabaseCommand}"/>
+                </fluent:RibbonGroupBox>
+                <fluent:RibbonGroupBox  Header="关闭">
+                    <fluent:Button Text="关闭地图" LargeIcon="Resources\Images\Error.png" IsEnabled="{Binding IsOpen}" Command="{Binding CloseMapCommand}"/>
+                </fluent:RibbonGroupBox>
+            </fluent:RibbonTabItem>
+            <fluent:RibbonTabItem ReduceOrder="Default,Default,Default,Large,Large,Large,Other,Other,Other" Header="编辑" FontSize="15">
+                <fluent:RibbonGroupBox  Header="字段">
+                    <fluent:Button Text="编辑字段" LargeIcon="Resources\Images\EditFields.png" IsEnabled="{Binding IsOpen}" Command="{Binding EditFieldsCommand}"/>
+                    <fluent:Button Text="设值" LargeIcon="Resources\Images\default.png" IsEnabled="{Binding IsOpen}" Command="{Binding SetDefaultCommand}"/>
+                </fluent:RibbonGroupBox>
+                <fluent:RibbonGroupBox Header="更新">
+                    <fluent:Button Text="地块编码" LargeIcon="Resources\Images\Dkbm.png" IsEnabled="{Binding IsOpen}" Command="{Binding DkbmCommand}"/>
+                    <fluent:Button Text="设置合同面积" LargeIcon="Resources\Images\contractmj.png" IsEnabled="{Binding IsOpen}" Command="{Binding HtmjCommand}"/>
+                    <fluent:Button Text="设置实测面积" LargeIcon="Resources\Images\Scmj.png" IsEnabled="{Binding IsOpen}" Command="{Binding ScmjCommand}"/>
+                    <fluent:Button Text="更新承包方编码" LargeIcon="Resources\Images\UnpdateCbfbm.png" IsEnabled="{Binding IsOpen}" Command="{Binding UpdateCommand}"/>
+                    <fluent:Button Text="替换承包方名称" LargeIcon="Resources\Images\replace.png" IsEnabled="{Binding IsOpen}" Command="{Binding ReplaceCommand}"/>
+                </fluent:RibbonGroupBox>
+                <fluent:RibbonGroupBox Header="提取">
+                    <fluent:Button Text="删除多余点" LargeIcon="Resources\Images\DeleteValidPoint.png" IsEnabled="{Binding IsOpen}" Command="{Binding DeleteValidPointCommand}"/>
+                    <fluent:Button Text="验证拓扑" LargeIcon="Resources\Images\ValidateTopo.png" IsEnabled="{Binding IsOpen}" Command="{Binding ValidTopoCommand}"/>
+                    <fluent:Button Text="提取界址点" LargeIcon="Resources\Images\plotchart.png" IsEnabled="{Binding IsOpen}" Command="{Binding JzdCommand}"/>
+                    <fluent:Button Text="提取界址线" LargeIcon="Resources\Images\Jzx.png" IsEnabled="{Binding IsOpen}" Command="{Binding JzxCommand}"/>
+                    <fluent:Button Text="提取四至" LargeIcon="Resources\Images\Sz.png" IsEnabled="{Binding IsOpen}" Command="{Binding SzCommmand}"/>
+                </fluent:RibbonGroupBox>
+            </fluent:RibbonTabItem>
+            <fluent:RibbonTabItem Header="查询" FontSize="15">
+                <fluent:RibbonGroupBox Header="整体查询" >
+                    <fluent:Button Text="地块信息" LargeIcon="Resources\Images\rounded-rectangle.png" Command="{Binding FieldsInfoCommand}" IsEnabled="{Binding IsOpen}"/>
+                    <fluent:Button Text="农户信息" LargeIcon="Resources\Images\Farmer.png" Name="ButtonFarmer" Command="{Binding FarmerInfoCommand}" IsEnabled="{Binding IsOpen}" />
+                </fluent:RibbonGroupBox>
+                <fluent:RibbonGroupBox Header="地块查询">
+                    <fluent:Button Text="开始点选" LargeIcon="Resources\Images\Edit.png" IsEnabled="{Binding IsOpen}" Command="{Binding StartPointCommand}"/>
+                    <fluent:Button Text="结束点选" LargeIcon="Resources\Images\Cancel.png" IsEnabled="{Binding IsOpen}" Command="{Binding StopPointCommand}"/>
+                </fluent:RibbonGroupBox>
+            </fluent:RibbonTabItem>
+            <fluent:RibbonTabItem Header="输出" FontSize="15">
+                <fluent:RibbonGroupBox  Header="标准输出">
+                    <fluent:Button Text="发包方调查表" LargeIcon="Resources\Images\A.png" />
+                    <fluent:Button Text="调查公示表" LargeIcon="Resources\Images\D.png" />
+                </fluent:RibbonGroupBox>
+                <fluent:RibbonGroupBox  Header="需求输出">
+                    <fluent:Button Text="家庭成员" LargeIcon="Resources\Images\Family.png" />
+                    <fluent:Button Text="公示表" LargeIcon="Resources\Images\open.png" />
+                    <fluent:Button Text="签字表" LargeIcon="Resources\Images\signature.png"/>
+                </fluent:RibbonGroupBox>
+                <fluent:RibbonGroupBox  Header="成果输出">
+                    <fluent:Button Text="经营权证" LargeIcon="Resources\Images\Certification.png"/>
+                    <fluent:Button Text="颁证清册" LargeIcon="Resources\Images\list.png" />
+                    <fluent:Button Text="公示公告" LargeIcon="Resources\Images\Gsgg.png"/>
+                    <fluent:Button Text="村民委托书" LargeIcon="Resources\Images\Delegate.png" />
+                </fluent:RibbonGroupBox>
+                <fluent:RibbonGroupBox  Header="归档输出">
+                    <fluent:Button Text="封面" LargeIcon="Resources\Images\Archives.png" />
+                    <fluent:Button Text="承包方调查表" LargeIcon="Resources\Images\B.png" />
+                    <fluent:Button Text="地块调查表" LargeIcon="Resources\Images\C.png" />
+                    <fluent:Button Text="承包合同" LargeIcon="Resources\Images\Contact.png" />
+                    <fluent:Button Text="地块分布图" LargeIcon="Resources\Images\Map.png" />
+                    <fluent:Button Text="户主声明书" LargeIcon="Resources\Images\Statement.png" />
+                    <fluent:Button Text="公示无异议" LargeIcon="Resources\Images\accept.png" />
+                    <fluent:Button Text="公示归户表" LargeIcon="Resources\Images\E.png"  />
+                    <fluent:Button Text="登记薄" LargeIcon="Resources\Images\Djb.png" />
+                </fluent:RibbonGroupBox>
+                <fluent:RibbonGroupBox  Header="承包方信息输出">
+                    <fluent:Button Text="土地确权成果归档" LargeIcon="Resources\Images\SortArchives.png" />
+                    <fluent:Button Text="农户成果归档" LargeIcon="Resources\Images\user.png" />
+                </fluent:RibbonGroupBox>
+            </fluent:RibbonTabItem>
+        </fluent:Ribbon>
+            <Grid Grid.Row="1">
+            <WindowsFormsHost Margin="0" Name="MainFormsHost">
+                <!--<controls:AxMapControl MousePointer="esriPointerArrow"></controls:AxMapControl>-->
+            </WindowsFormsHost>
+        </Grid>
     </Grid>
 </Window>

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Data;
 using System.Data.OleDb;
-
 namespace TdqqClient.Services.Database
 {
     /// <summary>
@@ -64,6 +63,7 @@ namespace TdqqClient.Services.Database
             }
             catch (Exception)
             {
+               
                 ret = errorState;
             }
             finally

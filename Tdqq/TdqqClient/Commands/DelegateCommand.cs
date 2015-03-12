@@ -6,7 +6,7 @@ using System.Windows.Input;
 
 namespace TdqqClient.Commands
 {
-    class DelegateCommand:ICommand
+    public class DelegateCommand:ICommand
     {
         public Action<object> ExecuteAction { get; set; }
         public Func<object, bool> CanExecuteFunc { get; set; }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Windows.Interop;
 using ESRI.ArcGIS.Geodatabase;
 using ESRI.ArcGIS.Geometry;
 using NPOI.HSSF.UserModel;
@@ -16,7 +17,7 @@ namespace TdqqClient.Services.Check
     /// <summary>
     /// 有效性检查
     /// </summary>
-    class ValidCheck
+    static class ValidCheck
     {
         #region 家庭成员信息表检查
         /// <summary>
@@ -54,13 +55,29 @@ namespace TdqqClient.Services.Check
             }
         }
 
+        public static bool IsHeaderColumnSorted(this IRow row)
+        {
+            bool flag;
+            if (row.GetCell(0).ToString().Trim() != "CBFBM" || row.GetCell(1).ToString().Trim() != "CYXB"
+                || row.GetCell(2).ToString().Trim() != "CYXM" || row.GetCell(3).ToString().Trim() != "CYZJLX" ||
+                row.GetCell(4).ToString().Trim() != "CYZJHM" || row.GetCell(5).ToString().Trim() != "CYBZ"
+                || row.GetCell(6).ToString().Trim() != "YHZGX" || row.GetCell(7).ToString().Trim() != "CYSZC" ||
+                row.GetCell(8).ToString().Trim() != "YZBM" || row.GetCell(9).ToString().Trim() != "SFGYR" ||
+                row.GetCell(10).ToString().Trim() != "LXDH") flag = false;
+            else
+            {
+                flag = true;
+            }
+            return flag;
+        }
+
         /// <summary>
         /// 检查Excel中一行数据是否符合规范
         /// </summary>
         /// <param name="row">一行的对象</param>
         /// <param name="errorInfo">错误信息</param>
         /// <returns>返回是否满足要求</returns>
-        public static bool ExcelRowCheck(IRow row, ref string errorInfo)
+        public static bool IsDataRowValid(this IRow row, ref string errorInfo)
         {
             //承包方编码
             var cell = row.GetCell(0);
@@ -140,19 +157,33 @@ namespace TdqqClient.Services.Check
             return (int)res > 0 ? false : true;
         }
 
-        /// <summary>
-        /// 检查某个字段是否满足是否规定的格式
-        /// </summary>
-        /// <param name="persondDatabase">个人地理数据库</param>
-        /// <param name="selectFeaure">选择的要素类</param>
-        /// <param name="fieldName">字段名称</param>
-        /// <param name="targetFieldType">检查的类型</param>
-        /// <returns>字段类型是否一致</returns>
-        public static bool FieldTypeCheck(string persondDatabase, string selectFeaure, string fieldName,
+        ///// <summary>
+        ///// 检查某个字段是否满足是否规定的格式
+        ///// </summary>
+        ///// <param name="persondDatabase">个人地理数据库</param>
+        ///// <param name="selectFeaure">选择的要素类</param>
+        ///// <param name="fieldName">字段名称</param>
+        ///// <param name="targetFieldType">检查的类型</param>
+        ///// <returns>字段类型是否一致</returns>
+        //public static bool FieldTypeCheck(string persondDatabase, string selectFeaure, string fieldName,
+        //    esriFieldType targetFieldType)
+        //{
+        //    IAeFactory pAeFactory = new PersonalGeoDatabase(persondDatabase);
+        //    IFeatureClass pFeatureClass = pAeFactory.OpenFeatureClasss(selectFeaure);
+        //    bool flag;
+        //    if (pFeatureClass.Fields.FindField(fieldName) == -1) flag = true;
+        //    else
+        //    {
+        //        var type = pFeatureClass.Fields.Field[pFeatureClass.Fields.FindField(fieldName)].Type;
+        //        flag = type == targetFieldType;
+        //    }
+        //    pAeFactory.ReleaseFeautureClass(pFeatureClass);
+        //    return flag;
+        //}
+
+        public static bool FieldTypeCheck(this IFeatureClass pFeatureClass, string fieldName,
             esriFieldType targetFieldType)
         {
-            IAeFactory pAeFactory = new PersonalGeoDatabase(persondDatabase);
-            IFeatureClass pFeatureClass = pAeFactory.OpenFeatureClasss(selectFeaure);
             bool flag;
             if (pFeatureClass.Fields.FindField(fieldName) == -1) flag = true;
             else
@@ -160,21 +191,41 @@ namespace TdqqClient.Services.Check
                 var type = pFeatureClass.Fields.Field[pFeatureClass.Fields.FindField(fieldName)].Type;
                 flag = type == targetFieldType;
             }
-            pAeFactory.ReleaseFeautureClass(pFeatureClass);
             return flag;
         }
 
+        ///// <summary>
+        ///// 检查字段是否存在
+        ///// </summary>
+        ///// <param name="personDatabase">个人地理数据库</param>
+        ///// <param name="selectFeaure">选择的要素类</param>
+        ///// <param name="fields">字段集合</param>
+        ///// <returns>只要有一个不存在则返回flag</returns>
+        //public static bool FieldExistCheck(string personDatabase, string selectFeaure, params string[] fields)
+        //{
+        //    IAeFactory pAeFactory = new PersonalGeoDatabase(personDatabase);
+        //    IFeatureClass pFeatureClass = pAeFactory.OpenFeatureClasss(selectFeaure);
+        //    bool flag = true;
+        //    foreach (var field in fields)
+        //    {
+        //        if (pFeatureClass.FindField(field) == -1)
+        //        {
+        //            flag = false;
+        //            break;
+        //        }
+        //    }
+        //    pAeFactory.ReleaseFeautureClass(pFeatureClass);
+        //    return flag;
+        //}
+
         /// <summary>
-        /// 检查字段是否存在
+        /// 扩展方法，判断这些字段是否存在
         /// </summary>
-        /// <param name="personDatabase">个人地理数据库</param>
-        /// <param name="selectFeaure">选择的要素类</param>
-        /// <param name="fields">字段集合</param>
-        /// <returns>只要有一个不存在则返回flag</returns>
-        public static bool FieldExistCheck(string personDatabase, string selectFeaure, params string[] fields)
+        /// <param name="pFeatureClass"></param>
+        /// <param name="fields"></param>
+        /// <returns></returns>
+        public static bool FieldExistCheck(this IFeatureClass pFeatureClass, params string[] fields)
         {
-            IAeFactory pAeFactory = new PersonalGeoDatabase(personDatabase);
-            IFeatureClass pFeatureClass = pAeFactory.OpenFeatureClasss(selectFeaure);
             bool flag = true;
             foreach (var field in fields)
             {
@@ -184,22 +235,18 @@ namespace TdqqClient.Services.Check
                     break;
                 }
             }
-            pAeFactory.ReleaseFeautureClass(pFeatureClass);
             return flag;
         }
 
         /// <summary>
-        /// 检查要素类是否为地块要素
+        /// 扩展方法，判断某个要素类是否特定的要素类型
         /// </summary>
-        /// <param name="personDatabase">个人地理数据库</param>
-        /// <param name="selectFeature">选择的要素类</param>
-        /// <param name="toCheckGeometryType">要检查的要素类型</param>
-        /// <returns>是否满足要求</returns>
-        public static bool CheckFeatureClassType(string personDatabase, string selectFeature, esriGeometryType toCheckGeometryType)
+        /// <param name="pFeatureClass"></param>
+        /// <param name="targetType"></param>
+        /// <returns>是否相同</returns>
+        public static bool CheckType(this IFeatureClass pFeatureClass, esriGeometryType targetType)
         {
-            IAeFactory pAeFactory = new PersonalGeoDatabase(personDatabase);
-            var pFeatureClass = pAeFactory.OpenFeatureClasss(selectFeature);
-            return pFeatureClass == null ? false : toCheckGeometryType == pFeatureClass.ShapeType;
+            return pFeatureClass.ShapeType == targetType;
         }
 
         /// <summary>
@@ -211,7 +258,7 @@ namespace TdqqClient.Services.Check
         public static bool IsExist(string personDatabase, string feaureClassName)
         {
             IAeFactory pAeFactory=new PersonalGeoDatabase(personDatabase);
-            IFeatureWorkspace workspace = pAeFactory.OpenWorkspace();
+            IFeatureWorkspace workspace = pAeFactory.OpenFeatrueWorkspace();
             IEnumDataset dataset = (workspace as IWorkspace).get_Datasets(esriDatasetType.esriDTAny);
             IDataset tmp = null;
             while ((tmp = dataset.Next()) != null)
@@ -226,6 +273,28 @@ namespace TdqqClient.Services.Check
                 return true;
             }
             return false;
+        }
+
+        /// <summary>
+        /// 扩展方法，计算要素类的个数
+        /// </summary>
+        /// <param name="pFeatureClass">要素类</param>
+        /// <returns>个数</returns>
+        public static int Count(this IFeatureClass pFeatureClass)
+        {
+            IFeatureCursor pFeatureCursor = pFeatureClass.Search(null, false);
+            int count=0;
+            IFeature pFeature;
+            while ((pFeature= pFeatureCursor.NextFeature()) != null)
+            {
+                count++;
+            }
+            return count;
+        }
+
+        public static bool IsDisposed(this System.Windows.Window window)
+        {
+            return new WindowInteropHelper(window).Handle == IntPtr.Zero;
         }
         #endregion
 

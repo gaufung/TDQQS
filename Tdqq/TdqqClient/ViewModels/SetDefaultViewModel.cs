@@ -273,7 +273,7 @@ namespace TdqqClient.ViewModels
             this.MouseLeftButtonDownCommand=new DelegateCommand();
             this.ConfirmCommand=new DelegateCommand();
         }
-         private void CloseWindow(object parameter)
+        private void CloseWindow(object parameter)
         {
             OnClosingRequest();
              this.IsConfirm = false;

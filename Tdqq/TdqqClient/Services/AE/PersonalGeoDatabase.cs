@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
+using ESRI.ArcGIS.DataSourcesGDB;
 using ESRI.ArcGIS.Geodatabase;
 
 namespace TdqqClient.Services.AE
@@ -22,7 +23,7 @@ namespace TdqqClient.Services.AE
             _personalDatabsePath = personalDatabase;
         }
 
-        public ESRI.ArcGIS.Geodatabase.IFeatureWorkspace OpenWorkspace()
+        public ESRI.ArcGIS.Geodatabase.IFeatureWorkspace OpenFeatrueWorkspace()
         {
             try
             {
@@ -42,7 +43,7 @@ namespace TdqqClient.Services.AE
 
         public ESRI.ArcGIS.Geodatabase.IFeatureClass OpenFeatureClasss(string featureClassName)
         {
-            var pFeatureWorkspace = OpenWorkspace();
+            var pFeatureWorkspace = OpenFeatrueWorkspace();
             try
             {
                 return pFeatureWorkspace == null ? 
@@ -99,7 +100,7 @@ namespace TdqqClient.Services.AE
 
         public void DeleteIfExist(string feaureClassName)
         {
-            IFeatureWorkspace workspace = OpenWorkspace();
+            IFeatureWorkspace workspace = OpenFeatrueWorkspace();
             IEnumDataset dataset = (workspace as IWorkspace).get_Datasets(esriDatasetType.esriDTAny);
             IDataset tmp = null;
             while ((tmp = dataset.Next()) != null && tmp.Name != feaureClassName) ;
@@ -127,6 +128,31 @@ namespace TdqqClient.Services.AE
             {
                 return false;
             }
+        }
+
+        public IWorkspace OpenWorkspace()
+        {
+            IWorkspaceFactory pWsFt = new AccessWorkspaceFactoryClass();
+            return pWsFt.OpenFromFile(_personalDatabsePath, 0);
+        }
+
+        public bool IsExist(string feaureClassName)
+        {
+            IFeatureWorkspace workspace = OpenFeatrueWorkspace();
+            IEnumDataset dataset = (workspace as IWorkspace).get_Datasets(esriDatasetType.esriDTAny);
+            IDataset tmp = null;
+            while ((tmp = dataset.Next()) != null)
+            {
+                if (tmp.Name == feaureClassName)
+                {
+                    break;
+                }
+            }
+            if (tmp!=null)
+            {
+                return true;
+            }
+            return false;
         }
     }
 }

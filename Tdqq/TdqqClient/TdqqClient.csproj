@@ -15,7 +15,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
+    <PlatformTarget>x86</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -102,6 +102,7 @@
     <Reference Include="ESRI.ArcGIS.Version, Version=10.2.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Program Files (x86)\ArcGIS\DeveloperKit10.2\DotNet\ESRI.ArcGIS.Version.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Fluent">
       <HintPath>..\..\..\Users\gaufung\Desktop\dll\Fluent.dll</HintPath>
@@ -119,6 +120,9 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Data.Linq" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Windows.Interactivity">
       <HintPath>..\..\..\Users\gaufung\Desktop\dll\System.Windows.Interactivity.dll</HintPath>
     </Reference>
@@ -126,9 +130,11 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="UIAutomationProvider" />
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="WindowsFormsIntegration" />
     <Reference Include="WordExport">
       <HintPath>..\..\..\Users\gaufung\Desktop\dll\WordExport.dll</HintPath>
     </Reference>
@@ -141,8 +147,68 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Commands\DelegateCommand.cs" />
+    <Compile Include="Commands\ExCommandParameter.cs" />
+    <Compile Include="Commands\ExInvokeCommandAction.cs" />
+    <Compile Include="Models\Edit\EditCbfbm.cs" />
+    <Compile Include="Models\Edit\EditCbfmc.cs" />
+    <Compile Include="Models\Edit\EditDkbm.cs" />
+    <Compile Include="Models\Edit\EditEdges.cs" />
+    <Compile Include="Models\Edit\EditFields.cs" />
+    <Compile Include="Models\Edit\EditHtmj.cs" />
+    <Compile Include="Models\Edit\EditModel.cs" />
+    <Compile Include="Models\Edit\EditInvalidatePoint.cs" />
+    <Compile Include="Models\Edit\EditPoints.cs" />
+    <Compile Include="Models\Edit\EditScmj.cs" />
+    <Compile Include="Models\Edit\EditSetDefault.cs" />
+    <Compile Include="Models\Edit\EditSz.cs" />
+    <Compile Include="Models\Edit\EditTopo.cs" />
+    <Compile Include="Models\EntityCode.cs" />
+    <Compile Include="Models\FarmerModel.cs" />
+    <Compile Include="Models\FieldModel.cs" />
+    <Compile Include="Models\SortEnity.cs" />
+    <Compile Include="Models\TdqqField.cs" />
+    <Compile Include="Services\AE\AeHelper.cs" />
+    <Compile Include="Services\AE\IAeFactory.cs" />
+    <Compile Include="Services\AE\PersonalGeoDatabase.cs" />
+    <Compile Include="Services\Check\ValidCheck.cs" />
+    <Compile Include="Services\Common\DialogHelper.cs" />
+    <Compile Include="Services\Common\Transcode.cs" />
     <Compile Include="Services\Database\IDatabaseService.cs" />
     <Compile Include="Services\Database\MsAccessDatabase.cs" />
+    <Compile Include="ViewModels\DkbmViewModel.cs" />
+    <Compile Include="ViewModels\FarmersViewModel.cs" />
+    <Compile Include="ViewModels\FieldsViewModel.cs" />
+    <Compile Include="ViewModels\FieldViewModel.cs" />
+    <Compile Include="ViewModels\MainWindowViewModel.cs" />
+    <Compile Include="ViewModels\NotificationObject.cs" />
+    <Compile Include="ViewModels\ReplaceViewModel.cs" />
+    <Compile Include="ViewModels\SelectFeatureViewModel.cs" />
+    <Compile Include="ViewModels\SetDefaultViewModel.cs" />
+    <Compile Include="Views\DkbmView.xaml.cs">
+      <DependentUpon>DkbmView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\FarmersView.xaml.cs">
+      <DependentUpon>FarmersView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\FieldsView.xaml.cs">
+      <DependentUpon>FieldsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\FieldView.xaml.cs">
+      <DependentUpon>FieldView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ReplaceView.xaml.cs">
+      <DependentUpon>ReplaceView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SelectFeatureView.xaml.cs">
+      <DependentUpon>SelectFeatureView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SetDefaultView.xaml.cs">
+      <DependentUpon>SetDefaultView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Wait.xaml.cs">
+      <DependentUpon>Wait.xaml</DependentUpon>
+    </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -155,6 +221,42 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Resources\DictionaryStyle.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\DkbmView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\FarmersView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\FieldsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\FieldView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ReplaceView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\SelectFeatureView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\SetDefaultView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Wait.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -181,9 +283,72 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Models\" />
-    <Folder Include="ViewModels\" />
-    <Folder Include="Views\" />
+    <Resource Include="Resources\Images\47_spotlight.png" />
+    <Resource Include="Resources\Images\A.png" />
+    <Resource Include="Resources\Images\SetFieldValue.png" />
+    <Resource Include="Resources\Images\access.png" />
+    <Resource Include="Resources\Images\Archives.png" />
+    <Resource Include="Resources\Images\Scmj.png" />
+    <Resource Include="Resources\Images\B.png" />
+    <Resource Include="Resources\Images\SortArchives.png" />
+    <Resource Include="Resources\Images\C.png" />
+    <Resource Include="Resources\Images\Cancel.png" />
+    <Resource Include="Resources\Images\close.png" />
+    <Resource Include="Resources\Images\Dkbm.png" />
+    <Resource Include="Resources\Images\D.png" />
+    <Resource Include="Resources\Images\default.png" />
+    <Resource Include="Resources\Images\Gsgg.png" />
+    <Resource Include="Resources\Images\Djb.png" />
+    <Resource Include="Resources\Images\signature.png" />
+    <Resource Include="Resources\Images\E.png" />
+    <Resource Include="Resources\Images\Edit.png" />
+    <Resource Include="Resources\Images\Error.png" />
+    <Resource Include="Resources\Images\excel.png" />
+    <Resource Include="Resources\Images\Family.png" />
+    <Resource Include="Resources\Images\Farmer.png" />
+    <Resource Include="Resources\Images\Help.png" />
+    <Resource Include="Resources\Images\import.png" />
+    <Resource Include="Resources\Images\info.png" />
+    <Resource Include="Resources\Images\Infomation.png" />
+    <Resource Include="Resources\Images\ValidateTopo.png" />
+    <Resource Include="Resources\Images\list.png" />
+    <Resource Include="Resources\Images\Map.png" />
+    <Resource Include="Resources\Images\Sz.png" />
+    <Resource Include="Resources\Images\DeleteValidPoint.png" />
+    <Resource Include="Resources\Images\open-alt.png" />
+    <Resource Include="Resources\Images\open.png" />
+    <Resource Include="Resources\Images\plotchart.png" />
+    <Resource Include="Resources\Images\EditFields.png" />
+    <Resource Include="Resources\Images\Question.png" />
+    <Resource Include="Resources\Images\UnpdateCbfbm.png" />
+    <Resource Include="Resources\Images\replace.png" />
+    <Resource Include="Resources\Images\rounded-rectangle.png" />
+    <Resource Include="Resources\Images\Jzx.png" />
+    <Resource Include="Resources\Images\search %281%29.png" />
+    <Resource Include="Resources\Images\search.png" />
+    <Resource Include="Resources\Images\select.png" />
+    <Resource Include="Resources\Images\Delegate.png" />
+    <Resource Include="Resources\Images\Statement.png" />
+    <Resource Include="Resources\Images\Certification.png" />
+    <Resource Include="Resources\Images\system-log-out.png" />
+    <Resource Include="Resources\Images\ImportInfo.png" />
+    <Resource Include="Resources\Images\todolist.png" />
+    <Resource Include="Resources\Images\Contact.png" />
+    <Resource Include="Resources\Images\user.png" />
+    <Resource Include="Resources\Images\Warning.png" />
+    <SplashScreen Include="Resources\Images\SplashImage.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\globe.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\contractmj.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{3259AA49-8AA1-44D3-9025-A0B520596A8C}" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\accept.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

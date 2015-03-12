@@ -10,7 +10,9 @@ namespace TdqqClient.Services.AE
         /// 打开工作空间
         /// </summary>
         /// <returns>工作空间</returns>
-        IFeatureWorkspace OpenWorkspace();
+        IFeatureWorkspace OpenFeatrueWorkspace();
+
+        IWorkspace OpenWorkspace();
 
         /// <summary>
         /// 打开要素类
@@ -56,5 +58,6 @@ namespace TdqqClient.Services.AE
         /// <returns></returns>
         bool DeleteFields(IFeatureClass pFeatureClass, List<IField> pFields);
 
+        bool IsExist(string feaureClassName);
     }
 }
