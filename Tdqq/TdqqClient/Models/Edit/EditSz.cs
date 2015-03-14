@@ -72,19 +72,26 @@ namespace TdqqClient.Models.Edit
             IFeatureCursor featureCursor = inputFC.Update(null, false);
             IFeature feature = featureCursor.NextFeature();
             int currentIndex = 0;
+            List<string> idList=new List<string>();
             while (feature != null)
             {
                 //存储四至的数组
                 wait.SetProgress(((double)currentIndex++ / (double)total));
                 string[] szArr = { "路", "路", "路", "路" };
                 szArr = GetOneFeaSZ(feature, PersonDatabase, SelectFeature + "_JZX");
+                var objectid = feature.Value[feature.Fields.FindField("OBJECTID")].ToString();
                 if (szArr == null)
                 {
+                    /*
                     MessageBox.Show(null, "请做一下拓扑检查",
                         "错误提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     wait.CloseWait();
                     para["ret"] = false;
                     return;
+                     */
+                    idList.Add(objectid);
+                    feature = featureCursor.NextFeature();
+                    continue;
                 }
                 if (!feature.get_Value(dxnbIndex[0]).ToString().StartsWith("_"))
                 {
@@ -109,7 +116,7 @@ namespace TdqqClient.Models.Edit
             Marshal.ReleaseComObject(featureCursor);
             workspaceEdit.StopEditOperation();
             workspaceEdit.StopEditing(true);
-
+            MessageBox.Show(idList.Count.ToString());
             wait.CloseWait();
             para["ret"] = true;
         }
@@ -215,7 +222,6 @@ namespace TdqqClient.Models.Edit
             //判断是不是每个点都有两个边与其相连
             if ((dList.Count >= 2 && nList.Count >= 2 && xList.Count >= 2 && bList.Count >= 2) == false)
             {
-
                 return null;
             }
             //判断list中那条边是真正的东南西北至

@@ -25,8 +25,7 @@ namespace TdqqClient
 
         }       
         protected override void OnStartup(StartupEventArgs e)
-        {
-           
+        {           
           this.StartupUri = new Uri("MainWindow.xaml", UriKind.RelativeOrAbsolute);
           base.OnStartup(e);
           ESRI.ArcGIS.RuntimeManager.Bind(ESRI.ArcGIS.ProductCode.EngineOrDesktop);

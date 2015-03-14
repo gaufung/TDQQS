@@ -50,34 +50,34 @@
             </fluent:RibbonTabItem>
             <fluent:RibbonTabItem Header="输出" FontSize="15">
                 <fluent:RibbonGroupBox  Header="标准输出">
-                    <fluent:Button Text="发包方调查表" LargeIcon="Resources\Images\A.png" />
-                    <fluent:Button Text="调查公示表" LargeIcon="Resources\Images\D.png" />
+                    <fluent:Button Text="发包方调查表" LargeIcon="Resources\Images\A.png"  IsEnabled="{Binding IsOpen}" Command="{Binding ExportACommand}"/>
+                    <fluent:Button Text="调查公示表" LargeIcon="Resources\Images\D.png" IsEnabled="{Binding IsOpen}" Command="{Binding ExportDCommand}"/>
                 </fluent:RibbonGroupBox>
                 <fluent:RibbonGroupBox  Header="需求输出">
-                    <fluent:Button Text="家庭成员" LargeIcon="Resources\Images\Family.png" />
-                    <fluent:Button Text="公示表" LargeIcon="Resources\Images\open.png" />
-                    <fluent:Button Text="签字表" LargeIcon="Resources\Images\signature.png"/>
+                    <fluent:Button Text="家庭成员" LargeIcon="Resources\Images\Family.png" IsEnabled="{Binding IsOpen}" Command="{Binding ExportFamilyCommand}"/>
+                    <fluent:Button Text="公示表" LargeIcon="Resources\Images\open.png" IsEnabled="{Binding IsOpen}" Command="{Binding ExportOpenCommand}"/>
+                    <fluent:Button Text="签字表" LargeIcon="Resources\Images\signature.png" IsEnabled="{Binding IsOpen}" Command="{Binding ExportSignCommand}"/>
                 </fluent:RibbonGroupBox>
                 <fluent:RibbonGroupBox  Header="成果输出">
-                    <fluent:Button Text="经营权证" LargeIcon="Resources\Images\Certification.png"/>
-                    <fluent:Button Text="颁证清册" LargeIcon="Resources\Images\list.png" />
-                    <fluent:Button Text="公示公告" LargeIcon="Resources\Images\Gsgg.png"/>
-                    <fluent:Button Text="村民委托书" LargeIcon="Resources\Images\Delegate.png" />
+                    <fluent:Button Text="经营权证" LargeIcon="Resources\Images\Certification.png" IsEnabled="{Binding IsOpen}"/>
+                    <fluent:Button Text="颁证清册" LargeIcon="Resources\Images\list.png" IsEnabled="{Binding IsOpen}" Command="{Binding ExportListCommand}"/>
+                    <fluent:Button Text="公示公告" LargeIcon="Resources\Images\Gsgg.png" IsEnabled="{Binding IsOpen}" Command="{Binding ExportPostCommand}"/>
+                    <fluent:Button Text="村民委托书" LargeIcon="Resources\Images\Delegate.png" IsEnabled="{Binding IsOpen}" Command="{Binding ExportDelegateCommand }"/>
                 </fluent:RibbonGroupBox>
                 <fluent:RibbonGroupBox  Header="归档输出">
-                    <fluent:Button Text="封面" LargeIcon="Resources\Images\Archives.png" />
-                    <fluent:Button Text="承包方调查表" LargeIcon="Resources\Images\B.png" />
-                    <fluent:Button Text="地块调查表" LargeIcon="Resources\Images\C.png" />
-                    <fluent:Button Text="承包合同" LargeIcon="Resources\Images\Contact.png" />
-                    <fluent:Button Text="地块分布图" LargeIcon="Resources\Images\Map.png" />
-                    <fluent:Button Text="户主声明书" LargeIcon="Resources\Images\Statement.png" />
-                    <fluent:Button Text="公示无异议" LargeIcon="Resources\Images\accept.png" />
-                    <fluent:Button Text="公示归户表" LargeIcon="Resources\Images\E.png"  />
-                    <fluent:Button Text="登记薄" LargeIcon="Resources\Images\Djb.png" />
+                    <fluent:Button Text="封面" LargeIcon="Resources\Images\Archives.png" IsEnabled="{Binding IsOpen}" />
+                    <fluent:Button Text="承包方调查表" LargeIcon="Resources\Images\B.png" IsEnabled="{Binding IsOpen}"/>
+                    <fluent:Button Text="地块调查表" LargeIcon="Resources\Images\C.png" IsEnabled="{Binding IsOpen}"/>
+                    <fluent:Button Text="承包合同" LargeIcon="Resources\Images\Contact.png" IsEnabled="{Binding IsOpen}"/>
+                    <fluent:Button Text="地块分布图" LargeIcon="Resources\Images\Map.png" IsEnabled="{Binding IsOpen}"/>
+                    <fluent:Button Text="户主声明书" LargeIcon="Resources\Images\Statement.png" IsEnabled="{Binding IsOpen}"/>
+                    <fluent:Button Text="公示无异议" LargeIcon="Resources\Images\accept.png" IsEnabled="{Binding IsOpen}" />
+                    <fluent:Button Text="公示归户表" LargeIcon="Resources\Images\E.png"  IsEnabled="{Binding IsOpen}"/>
+                    <fluent:Button Text="登记薄" LargeIcon="Resources\Images\Djb.png" IsEnabled="{Binding IsOpen}"/>
                 </fluent:RibbonGroupBox>
                 <fluent:RibbonGroupBox  Header="承包方信息输出">
-                    <fluent:Button Text="土地确权成果归档" LargeIcon="Resources\Images\SortArchives.png" />
-                    <fluent:Button Text="农户成果归档" LargeIcon="Resources\Images\user.png" />
+                    <fluent:Button Text="土地确权成果归档" LargeIcon="Resources\Images\SortArchives.png" IsEnabled="{Binding IsOpen}"/>
+                    <fluent:Button Text="农户成果归档" LargeIcon="Resources\Images\user.png" IsEnabled="{Binding IsOpen}"/>
                 </fluent:RibbonGroupBox>
             </fluent:RibbonTabItem>
         </fluent:Ribbon>
