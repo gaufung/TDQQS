@@ -1,8 +1,4 @@
-﻿using System;
-using System.CodeDom;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿
 using System.Windows.Forms;
 using TdqqClient.Services.Database;
 using TdqqClient.ViewModels;
