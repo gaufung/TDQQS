@@ -21,6 +21,7 @@ using TdqqClient.Commands;
 using TdqqClient.Models;
 using TdqqClient.Models.Edit;
 using TdqqClient.Models.Export.ExportOne;
+using TdqqClient.Models.Export.ExportTotal;
 using TdqqClient.Services.AE;
 using TdqqClient.Services.Check;
 using TdqqClient.Services.Common;
@@ -105,6 +106,8 @@ namespace TdqqClient.ViewModels
             ExportListCommand.ExecuteAction=new Action<object>(ExportList);
             ExportPostCommand.ExecuteAction=new Action<object>(ExportPost);
             ExportDelegateCommand.ExecuteAction=new Action<object>(ExportDelegate);
+            ExportJyqzCommand.ExecuteAction=new Action<object>(ExportJyqz);
+            ExportConverCommand.ExecuteAction=new Action<object>(ExportCover);
             InitAxMapControlEvent();
         }
 
@@ -136,6 +139,8 @@ namespace TdqqClient.ViewModels
             ExportListCommand=new DelegateCommand();
             ExportPostCommand=new DelegateCommand();
             ExportDelegateCommand=new DelegateCommand();
+            ExportJyqzCommand=new DelegateCommand();
+            ExportConverCommand=new DelegateCommand();
 
         }
 
@@ -819,7 +824,9 @@ namespace TdqqClient.ViewModels
             FamilyExport export=new FamilyExport(_personDatabase,_selectFeauture,_basicDatabase);
             export.Export(parameter);
         }
-
+        /// <summary>
+        /// 导出公示表
+        /// </summary>
         public DelegateCommand ExportOpenCommand { get; set; }
 
         private void ExportOpen(object parameter)
@@ -827,7 +834,9 @@ namespace TdqqClient.ViewModels
             OpenExport export=new OpenExport(_personDatabase,_selectFeauture,_basicDatabase);
             export.Export(parameter);
         }
-
+        /// <summary>
+        /// 导出签字表
+        /// </summary>
         public DelegateCommand ExportSignCommand { get; set; }
 
         private void ExportSign(object parameter)
@@ -836,6 +845,10 @@ namespace TdqqClient.ViewModels
             export.Export(parameter);
         }
 
+        
+        /// <summary>
+        /// 导出颁证清册
+        /// </summary>
         public DelegateCommand ExportListCommand { get; set; }
 
         private void ExportList(object parameter)
@@ -843,7 +856,9 @@ namespace TdqqClient.ViewModels
             ListExport export=new ListExport(_personDatabase,_selectFeauture,_basicDatabase);
             export.Export(parameter);
         }
-
+        /// <summary>
+        /// 导出公示公告
+        /// </summary>
         public DelegateCommand ExportPostCommand { get; set; }
 
         private void ExportPost(object parameter)
@@ -852,12 +867,31 @@ namespace TdqqClient.ViewModels
             export.Export(parameter);
         }
 
+        /// <summary>
+        /// 导出委托书
+        /// </summary>
         public DelegateCommand ExportDelegateCommand { get; set; }
 
         private void ExportDelegate(object parameter)
         {
             DelegateExport export=new DelegateExport(_personDatabase,_selectFeauture,_basicDatabase);
             export.Export(parameter);
+        }
+
+        public DelegateCommand ExportJyqzCommand { get; set; }
+
+        private void ExportJyqz(object parameter)
+        {
+            JyqzsExport export=new JyqzsExport(_personDatabase,_selectFeauture,_basicDatabase);
+            export.Export();
+        }
+
+        public DelegateCommand ExportConverCommand { get; set; }
+
+        private void ExportCover(object parameter)
+        {
+            CoversExport export=new CoversExport(_personDatabase,_selectFeauture,_basicDatabase);
+            export.Export();
         }
         #endregion
     }

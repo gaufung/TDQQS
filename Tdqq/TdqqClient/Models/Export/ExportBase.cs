@@ -308,6 +308,16 @@ namespace TdqqClient.Models.Export
             var dt = accessFactory.Query(sqlString);
             return (dt == null || dt.Rows.Count != 1) ? null : dt.Rows[0];
         }
+
+        protected static void SpiltFbfdzToXianXiangCun(string fbfdz, ref string xian, ref string zhen, ref string cun)
+        {
+            int xianIndex = fbfdz.IndexOf("县");
+            int zhenIndex = fbfdz.IndexOf("镇") == -1 ? fbfdz.IndexOf("乡") : fbfdz.IndexOf("镇");
+            int cunIndex = fbfdz.IndexOf("村");
+            xian = fbfdz.Substring(0, xianIndex);
+            zhen = fbfdz.Substring(xianIndex + 1, zhenIndex - xianIndex - 1);
+            cun = fbfdz.Substring(zhenIndex + 1, cunIndex - zhenIndex - 1);
+        }
         #endregion
 
         /// <summary>
