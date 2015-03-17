@@ -66,18 +66,32 @@
                 </fluent:RibbonGroupBox>
                 <fluent:RibbonGroupBox  Header="归档输出">
                     <fluent:Button Text="封面" LargeIcon="Resources\Images\Archives.png" IsEnabled="{Binding IsOpen}" Command="{Binding ExportConverCommand}"/>
-                    <fluent:Button Text="承包方调查表" LargeIcon="Resources\Images\B.png" IsEnabled="{Binding IsOpen}"/>
-                    <fluent:Button Text="地块调查表" LargeIcon="Resources\Images\C.png" IsEnabled="{Binding IsOpen}"/>
-                    <fluent:Button Text="承包合同" LargeIcon="Resources\Images\Contact.png" IsEnabled="{Binding IsOpen}"/>
-                    <fluent:Button Text="地块分布图" LargeIcon="Resources\Images\Map.png" IsEnabled="{Binding IsOpen}"/>
-                    <fluent:Button Text="户主声明书" LargeIcon="Resources\Images\Statement.png" IsEnabled="{Binding IsOpen}"/>
-                    <fluent:Button Text="公示无异议" LargeIcon="Resources\Images\accept.png" IsEnabled="{Binding IsOpen}" />
-                    <fluent:Button Text="公示归户表" LargeIcon="Resources\Images\E.png"  IsEnabled="{Binding IsOpen}"/>
-                    <fluent:Button Text="登记薄" LargeIcon="Resources\Images\Djb.png" IsEnabled="{Binding IsOpen}"/>
+                    <fluent:Button Text="承包方调查表" LargeIcon="Resources\Images\B.png" IsEnabled="{Binding IsOpen}" Command="{Binding ExportCbfCommand}"/>
+                    <fluent:Button Text="地块调查表" LargeIcon="Resources\Images\C.png" IsEnabled="{Binding IsOpen}" Command="{Binding ExportDkCommand}"/>
+                    <fluent:Button Text="承包合同" LargeIcon="Resources\Images\Contact.png" IsEnabled="{Binding IsOpen}" Command="{Binding ExportContractCommand}"/>
+                    <fluent:Button Text="地块分布图" LargeIcon="Resources\Images\Map.png" IsEnabled="{Binding IsOpen}" Command="{Binding ExportMapCommand}"/>
+                    <fluent:Button Text="户主声明书" LargeIcon="Resources\Images\Statement.png" IsEnabled="{Binding IsOpen}" Command="{Binding ExportStatementCommand}"/>
+                    <fluent:Button Text="公示无异议" LargeIcon="Resources\Images\accept.png" IsEnabled="{Binding IsOpen}" Command="{Binding ExportAcceptCommand}"/>
+                    <fluent:Button Text="公示归户表" LargeIcon="Resources\Images\E.png"  IsEnabled="{Binding IsOpen}" Command="{Binding ExportGhbCommand}"/>
+                    <fluent:Button Text="登记薄" LargeIcon="Resources\Images\Djb.png" IsEnabled="{Binding IsOpen}" Command="{Binding ExportRegisterCommand}"/>
                 </fluent:RibbonGroupBox>
                 <fluent:RibbonGroupBox  Header="承包方信息输出">
-                    <fluent:Button Text="土地确权成果归档" LargeIcon="Resources\Images\SortArchives.png" IsEnabled="{Binding IsOpen}"/>
-                    <fluent:Button Text="农户成果归档" LargeIcon="Resources\Images\user.png" IsEnabled="{Binding IsOpen}"/>
+                    <fluent:Button Text="土地确权成果归档" LargeIcon="Resources\Images\SortArchives.png" IsEnabled="{Binding IsOpen}" Command="{Binding ExportArchiveCommand}"/>
+                    <fluent:Button Text="农户成果归档" LargeIcon="Resources\Images\user.png" IsEnabled="{Binding IsOpen}" Command="{Binding ExportFarmerArchiveCommand}"/>
+                </fluent:RibbonGroupBox>
+            </fluent:RibbonTabItem>
+            <fluent:RibbonTabItem ReduceOrder="Default,Default,Default,Large,Large,Large,Other,Other,Other" Header="输入" FontSize="15">
+                <fluent:RibbonGroupBox  Header="承包方">
+                    <fluent:Button Text="承包方编码" LargeIcon="Resources\Images\excel.png" IsEnabled="{Binding IsOpen}"  />
+                    <fluent:Button Text="导入基础数据表" LargeIcon="Resources\Images\ImportInfo.png" IsEnabled="{Binding IsOpen}" />
+                </fluent:RibbonGroupBox>
+                <fluent:RibbonGroupBox  Header="发包方">
+                    <fluent:Button Text="导入发包方" LargeIcon="Resources\Images\Import.png" IsEnabled="{Binding IsOpen}" />
+                </fluent:RibbonGroupBox>
+            </fluent:RibbonTabItem>
+            <fluent:RibbonTabItem ReduceOrder="Default,Default,Default,Large,Large,Large,Other,Other,Other" Header="帮助" FontSize="15">
+                <fluent:RibbonGroupBox  Header="帮助">
+                    <fluent:Button Text="帮助" LargeIcon="Resources\Images\Help.png" />
                 </fluent:RibbonGroupBox>
             </fluent:RibbonTabItem>
         </fluent:Ribbon>

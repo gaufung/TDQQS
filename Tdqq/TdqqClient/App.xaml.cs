@@ -5,6 +5,7 @@ using System.Data;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows;
+using Aspose.Pdf;
 using ESRI.ArcGIS.esriSystem;
 
 namespace TdqqClient
@@ -25,11 +26,14 @@ namespace TdqqClient
 
         }       
         protected override void OnStartup(StartupEventArgs e)
-        {           
-          this.StartupUri = new Uri("MainWindow.xaml", UriKind.RelativeOrAbsolute);
-          base.OnStartup(e);
-          ESRI.ArcGIS.RuntimeManager.Bind(ESRI.ArcGIS.ProductCode.EngineOrDesktop);
-          InitializeEngineLicense();       
+        {
+           
+                this.StartupUri = new Uri("MainWindow.xaml", UriKind.RelativeOrAbsolute);
+                base.OnStartup(e);
+                ESRI.ArcGIS.RuntimeManager.Bind(ESRI.ArcGIS.ProductCode.EngineOrDesktop);
+                InitializeEngineLicense();  
+            
+               
         }
     }
 }

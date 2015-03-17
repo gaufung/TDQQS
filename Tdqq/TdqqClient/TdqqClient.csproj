@@ -118,6 +118,11 @@
     <Reference Include="NPOI">
       <HintPath>..\..\..\Users\gaufung\Desktop\dll\NPOI.dll</HintPath>
     </Reference>
+    <Reference Include="stdole, Version=7.0.3300.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <SpecificVersion>False</SpecificVersion>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+      <HintPath>..\..\..\Program Files (x86)\Common Files\Microsoft Shared\MSEnv\PublicAssemblies\stdole.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.Linq" />
@@ -150,6 +155,7 @@
     <Compile Include="Commands\DelegateCommand.cs" />
     <Compile Include="Commands\ExCommandParameter.cs" />
     <Compile Include="Commands\ExInvokeCommandAction.cs" />
+    <Compile Include="Models\DkInfo.cs" />
     <Compile Include="Models\Edit\EditCbfbm.cs" />
     <Compile Include="Models\Edit\EditCbfmc.cs" />
     <Compile Include="Models\Edit\EditDkbm.cs" />
@@ -179,16 +185,21 @@
     <Compile Include="Models\Export\ExportSingle\CbfExport.cs" />
     <Compile Include="Models\Export\ExportSingle\ContractExport.cs" />
     <Compile Include="Models\Export\ExportSingle\CoverExport.cs" />
+    <Compile Include="Models\Export\ExportSingle\DkExport.cs" />
     <Compile Include="Models\Export\ExportSingle\GhbExport.cs" />
     <Compile Include="Models\Export\ExportSingle\JyqzExport.cs" />
+    <Compile Include="Models\Export\ExportSingle\MapExport.cs" />
     <Compile Include="Models\Export\ExportSingle\RegisterExport.cs" />
     <Compile Include="Models\Export\ExportSingle\StatementExport.cs" />
     <Compile Include="Models\Export\ExportTotal\AcceptsExport.cs" />
+    <Compile Include="Models\Export\ExportTotal\ArchivesExport.cs" />
     <Compile Include="Models\Export\ExportTotal\CbfsExport.cs" />
     <Compile Include="Models\Export\ExportTotal\ContractsExport.cs" />
     <Compile Include="Models\Export\ExportTotal\CoversExport.cs" />
+    <Compile Include="Models\Export\ExportTotal\DksExport.cs" />
     <Compile Include="Models\Export\ExportTotal\GhbsExport.cs" />
     <Compile Include="Models\Export\ExportTotal\JyqzsExport.cs" />
+    <Compile Include="Models\Export\ExportTotal\MapsExport.cs" />
     <Compile Include="Models\Export\ExportTotal\RegistersExport.cs" />
     <Compile Include="Models\Export\ExportTotal\StatementsExport.cs" />
     <Compile Include="Models\FarmerModel.cs" />
@@ -204,7 +215,9 @@
     <Compile Include="Services\Common\Transcode.cs" />
     <Compile Include="Services\Database\IDatabaseService.cs" />
     <Compile Include="Services\Database\MsAccessDatabase.cs" />
+    <Compile Include="ViewModels\ArchiveViewModel.cs" />
     <Compile Include="ViewModels\DkbmViewModel.cs" />
+    <Compile Include="ViewModels\ExportViewModel.cs" />
     <Compile Include="ViewModels\FarmersViewModel.cs" />
     <Compile Include="ViewModels\FieldsViewModel.cs" />
     <Compile Include="ViewModels\FieldViewModel.cs" />
@@ -213,8 +226,14 @@
     <Compile Include="ViewModels\ReplaceViewModel.cs" />
     <Compile Include="ViewModels\SelectFeatureViewModel.cs" />
     <Compile Include="ViewModels\SetDefaultViewModel.cs" />
+    <Compile Include="Views\ArchiveView.xaml.cs">
+      <DependentUpon>ArchiveView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\DkbmView.xaml.cs">
       <DependentUpon>DkbmView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ExportView.xaml.cs">
+      <DependentUpon>ExportView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\FarmersView.xaml.cs">
       <DependentUpon>FarmersView.xaml</DependentUpon>
@@ -253,7 +272,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\ArchiveView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\DkbmView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ExportView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -378,7 +405,9 @@
   <ItemGroup>
     <Resource Include="Resources\Images\accept.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Models\Import\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

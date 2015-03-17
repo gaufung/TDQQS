@@ -18,6 +18,8 @@ namespace TdqqClient.Models.Export.ExportSingle
         public override void Export(string cbfmc, string cbfbm, string folderPath, string edgeFeature = "")
         {
             var saveFilePath = folderPath + @"\" + cbfbm.Substring(14) + "_" + cbfmc + "_07公示结果归户表.xls";
+            var templatePath = AppDomain.CurrentDomain.BaseDirectory + @"\template\农村土地承包经营权公示结果归户表.xls";
+            File.Copy(templatePath,saveFilePath,true);
             ExportInfo(saveFilePath,cbfmc,cbfbm);
             ExportField(saveFilePath,cbfmc,cbfbm);
             Export2Pdf.Excel2Pdf(saveFilePath);

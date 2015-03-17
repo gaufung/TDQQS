@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -11,12 +12,11 @@ using TdqqClient.Views;
 
 namespace TdqqClient.Models.Export.ExportTotal
 {
-    class ContractsExport:ExportBase
+    class DksExport:ExportBase
     {
-        public ContractsExport(string personDatabase, string selectFeauture, string basicDatabase)
+        public DksExport(string personDatabase, string selectFeauture, string basicDatabase)
             : base(personDatabase, selectFeauture, basicDatabase)
         {   }
-
         public void Export()
         {
             var dialogHelper = new DialogHelper();
@@ -24,40 +24,42 @@ namespace TdqqClient.Models.Export.ExportTotal
             if (string.IsNullOrEmpty(folderPath)) return;
             if (Export(folderPath))
             {
-                MessageBox.Show(null, "合同书导出成功",
+                MessageBox.Show(null, "地块调查表导出成功",
                     "信息提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             else
             {
-                MessageBox.Show(null, "合同书导出失败", "错误提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }   
+                MessageBox.Show(null,
+                    "地块调查表导出失败",
+                    "错误提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private bool Export(string folderPath)
         {
-            var  wait=new Wait();
-            wait.SetWaitCaption("导出合同书");
-            Hashtable para=new Hashtable()
+            Wait wait = new Wait();
+            wait.SetWaitCaption("导出地块调查表");
+            Hashtable para = new Hashtable()
             {
                 {"wait",wait},{"folderPath",folderPath},{"ret",false}
             };
-            Thread t=new Thread(new ParameterizedThreadStart(Export));
+            Thread t = new Thread(new ParameterizedThreadStart(ExportF));
             t.Start(para);
             wait.ShowDialog();
             t.Abort();
-            return (bool) para["ret"];
+            return (bool)para["ret"];
         }
 
-        private void Export(object p)
+        private void ExportF(object p)
         {
             var para = p as Hashtable;
             var wait = para["wait"] as Wait;
-            var folderPath = para["folderPath"].ToString();
+            var folderPath = para["folderPath"].ToString().Trim();
             try
             {
                 var dt = SelectCbfbmOwnFields();
                 var rowCount = dt.Rows.Count;
-                ExportBase export = new ContractExport(PersonDatabase, SelectFeature, BasicDatabase);
+                ExportBase export = new DkExport(PersonDatabase, SelectFeature, BasicDatabase);
                 for (int i = 0; i < rowCount; i++)
                 {
                     wait.SetProgress(((double)i / (double)rowCount));
@@ -65,10 +67,13 @@ namespace TdqqClient.Models.Export.ExportTotal
                     var cbfbm = dt.Rows[i][0].ToString().Trim();
                     export.Export(cbfmc, cbfbm, folderPath);
                 }
-                para["ret"] = true; 
+                //删除掉无效的地块
+                //DeleteFiles(folderPath);
+                para["ret"] = true;
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                MessageBox.Show(e.ToString());
                 para["ret"] = false;
             }
             finally
@@ -76,5 +81,6 @@ namespace TdqqClient.Models.Export.ExportTotal
                 wait.CloseWait();
             }
         }
+       
     }
 }

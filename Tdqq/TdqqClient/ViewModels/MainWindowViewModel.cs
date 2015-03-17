@@ -7,7 +7,6 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows;
 using System.Windows.Forms;
-using Aspose.Words.Saving;
 using ESRI.ArcGIS.Carto;
 using ESRI.ArcGIS.Controls;
 using ESRI.ArcGIS.DataManagementTools;
@@ -15,17 +14,13 @@ using ESRI.ArcGIS.Display;
 using ESRI.ArcGIS.Geodatabase;
 using ESRI.ArcGIS.Geometry;
 using ESRI.ArcGIS.Geoprocessor;
-using NPOI.SS.Formula.Functions;
-using NPOI.SS.Formula.PTG;
 using TdqqClient.Commands;
-using TdqqClient.Models;
 using TdqqClient.Models.Edit;
 using TdqqClient.Models.Export.ExportOne;
 using TdqqClient.Models.Export.ExportTotal;
 using TdqqClient.Services.AE;
 using TdqqClient.Services.Check;
 using TdqqClient.Services.Common;
-using TdqqClient.Services.Database;
 using TdqqClient.Views;
 using MessageBox = System.Windows.Forms.MessageBox;
 
@@ -98,16 +93,26 @@ namespace TdqqClient.ViewModels
             FarmerInfoCommand.ExecuteAction = new Action<object>(FarmerInfo);
             StartPointCommand.ExecuteAction = new Action<object>(ChangePointEditState);
             StopPointCommand.ExecuteAction = new Action<object>(ChangePointEditState);
-            ExportACommand.ExecuteAction=new Action<object>(ExportA);
+            ExportACommand.ExecuteAction = new Action<object>(ExportA);
             ExportDCommand.ExecuteAction = new Action<object>(ExportD);
             ExportFamilyCommand.ExecuteAction = new Action<object>(ExportFamily);
-            ExportOpenCommand.ExecuteAction=new Action<object>(ExportOpen);
-            ExportSignCommand.ExecuteAction=new Action<object>(ExportSign);
-            ExportListCommand.ExecuteAction=new Action<object>(ExportList);
-            ExportPostCommand.ExecuteAction=new Action<object>(ExportPost);
-            ExportDelegateCommand.ExecuteAction=new Action<object>(ExportDelegate);
-            ExportJyqzCommand.ExecuteAction=new Action<object>(ExportJyqz);
-            ExportConverCommand.ExecuteAction=new Action<object>(ExportCover);
+            ExportOpenCommand.ExecuteAction = new Action<object>(ExportOpen);
+            ExportSignCommand.ExecuteAction = new Action<object>(ExportSign);
+            ExportListCommand.ExecuteAction = new Action<object>(ExportList);
+            ExportPostCommand.ExecuteAction = new Action<object>(ExportPost);
+            ExportDelegateCommand.ExecuteAction = new Action<object>(ExportDelegate);
+            ExportJyqzCommand.ExecuteAction = new Action<object>(ExportJyqz);
+            ExportConverCommand.ExecuteAction = new Action<object>(ExportCover);
+            ExportCbfCommand.ExecuteAction = new Action<object>(ExportCbf);
+            ExportMapCommand.ExecuteAction = new Action<object>(ExportMap);
+            ExportContractCommand.ExecuteAction = new Action<object>(ExportContract);
+            ExportStatementCommand.ExecuteAction = new Action<object>(ExportStatement);
+            ExportAcceptCommand.ExecuteAction = new Action<object>(ExportAccept);
+            ExportGhbCommand.ExecuteAction = new Action<object>(ExportGhb);
+            ExportDkCommand.ExecuteAction=new Action<object>(ExportDk);
+            ExportRegisterCommand.ExecuteAction = new Action<object>(ExportRegister);
+            ExportArchiveCommand.ExecuteAction=new Action<object>(ExportArchive);
+            ExportFarmerArchiveCommand.ExecuteAction=new Action<object>(ExportFarmerArchive);
             InitAxMapControlEvent();
         }
 
@@ -131,17 +136,26 @@ namespace TdqqClient.ViewModels
             FarmerInfoCommand=new DelegateCommand();
             StartPointCommand=new DelegateCommand();
             StopPointCommand=new DelegateCommand();
-            ExportACommand=new DelegateCommand();
-            ExportDCommand=new DelegateCommand();
-            ExportFamilyCommand=new DelegateCommand();
-            ExportOpenCommand=new DelegateCommand();
-            ExportSignCommand=new DelegateCommand();
-            ExportListCommand=new DelegateCommand();
-            ExportPostCommand=new DelegateCommand();
-            ExportDelegateCommand=new DelegateCommand();
-            ExportJyqzCommand=new DelegateCommand();
-            ExportConverCommand=new DelegateCommand();
-
+            ExportACommand = new DelegateCommand();
+            ExportDCommand = new DelegateCommand();
+            ExportFamilyCommand = new DelegateCommand();
+            ExportOpenCommand = new DelegateCommand();
+            ExportSignCommand = new DelegateCommand();
+            ExportListCommand = new DelegateCommand();
+            ExportPostCommand = new DelegateCommand();
+            ExportDelegateCommand = new DelegateCommand();
+            ExportJyqzCommand = new DelegateCommand();
+            ExportConverCommand = new DelegateCommand();
+            ExportCbfCommand = new DelegateCommand();
+            ExportDkCommand = new DelegateCommand();
+            ExportMapCommand = new DelegateCommand();
+            ExportStatementCommand = new DelegateCommand();
+            ExportAcceptCommand = new DelegateCommand();
+            ExportContractCommand = new DelegateCommand();
+            ExportGhbCommand=new DelegateCommand();
+            ExportRegisterCommand = new DelegateCommand();
+            ExportArchiveCommand=new DelegateCommand();
+            ExportFarmerArchiveCommand=new DelegateCommand();
         }
 
         #region 打开和关闭地图
@@ -892,6 +906,86 @@ namespace TdqqClient.ViewModels
         {
             CoversExport export=new CoversExport(_personDatabase,_selectFeauture,_basicDatabase);
             export.Export();
+        }
+
+        public DelegateCommand ExportCbfCommand { get; set; }
+
+        private void ExportCbf(object parameter)
+        {
+            CbfsExport export=new CbfsExport(_personDatabase,_selectFeauture,_basicDatabase);
+            export.Export();
+        }
+
+        public DelegateCommand ExportDkCommand  { get; set; }
+
+        private void ExportDk(object parameter)
+        {
+            DksExport export=new DksExport(_personDatabase,_selectFeauture,_basicDatabase);
+            export.Export();
+        }
+
+        public DelegateCommand ExportContractCommand { get; set; }
+
+        private void ExportContract(object parameter)
+        {
+            ContractsExport export=new ContractsExport(_personDatabase,_selectFeauture,_basicDatabase);
+            export.Export();
+        }
+
+        public DelegateCommand ExportStatementCommand { get; set; }
+
+        private void ExportStatement(object parameter)
+        {
+            StatementsExport export=new StatementsExport(_personDatabase,_selectFeauture,_basicDatabase);
+            export.Export();
+        }
+
+        public DelegateCommand ExportAcceptCommand { get; set; }
+
+        private void ExportAccept(object parameter)
+        {
+            AcceptsExport export=new AcceptsExport(_personDatabase,_selectFeauture,_basicDatabase);
+            export.Export();
+        }
+
+        public DelegateCommand ExportMapCommand { get; set; }
+
+        private void ExportMap(object parameter)
+        {
+            MapsExport export=new MapsExport(_personDatabase,_selectFeauture,_basicDatabase);
+            export.Export();
+        }
+
+        public DelegateCommand ExportGhbCommand { get; set; }
+
+        private void ExportGhb(object parameter)
+        {
+            GhbsExport export=new GhbsExport(_personDatabase,_selectFeauture,_basicDatabase);
+            export.Export();
+        }
+
+        public DelegateCommand ExportRegisterCommand { get; set; }
+
+        private void ExportRegister(object parameter)
+        {
+            RegistersExport export=new RegistersExport(_personDatabase,_selectFeauture,_basicDatabase);
+            export.Export();
+        }
+
+        public DelegateCommand ExportArchiveCommand { get; set; }
+
+        private void ExportArchive(object parameter)
+        {
+            ArchivesExport export=new ArchivesExport(_personDatabase,_selectFeauture,_basicDatabase);
+            export.Export();
+        }
+        public DelegateCommand ExportFarmerArchiveCommand { get; set; }
+
+        private void ExportFarmerArchive(object parameter)
+        {
+            ExportViewModel exportVm=new ExportViewModel(_personDatabase,_selectFeauture,_basicDatabase);
+            ExportView exportV=new ExportView(exportVm);
+            exportV.ShowDialog();
         }
         #endregion
     }
