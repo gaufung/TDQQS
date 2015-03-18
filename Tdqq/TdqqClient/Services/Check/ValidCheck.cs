@@ -17,7 +17,7 @@ namespace TdqqClient.Services.Check
     /// <summary>
     /// 有效性检查
     /// </summary>
-    static class ValidCheck
+    public static class ValidCheck
     {
         #region 家庭成员信息表检查
         /// <summary>

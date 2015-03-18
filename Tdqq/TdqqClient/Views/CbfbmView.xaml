@@ -1,0 +1,46 @@
+﻿<Window x:Class="TdqqClient.Views.CbfbmView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+        xmlns:commands="clr-namespace:TdqqClient.Commands"
+        Title="CbfbmView" WindowStyle="None" ResizeMode="NoResize"
+        Background="Transparent" AllowsTransparency="True" Height="300" Width="400" WindowStartupLocation="CenterScreen">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="1.2*"/>
+        </Grid.RowDefinitions>
+        <Border CornerRadius="10" Grid.RowSpan="5" >
+            <Border.Background>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                    <GradientStop Color="LightGray" Offset="0.1"/>
+                    <GradientStop Color="DarkGray" Offset="0.9"/>
+                </LinearGradientBrush>
+            </Border.Background>
+        </Border>
+        <Image Source="/Resources\Images\Cancel.png" Grid.Row="0" 
+               HorizontalAlignment="Right" Margin="3" Cursor="Hand" >
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="MouseLeftButtonDown">
+                    <commands:ExInvokeCommandAction 
+						Command="{Binding CloseCommand}" />
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+        </Image>
+        <Label Content="承包方编码" FontSize="16" Grid.Row="1" 
+               VerticalAlignment="Top" HorizontalAlignment="Center"  FontFamily="微软雅黑" FontWeight="Bold"/>
+        <StackPanel Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Horizontal">
+            <Label Content="发包方编码:" FontSize="15"/>
+            <TextBox  Margin="10,0,0,0" Height="30" Width="180"  VerticalAlignment="Center" Text="{Binding Fbfbm}"/>
+        </StackPanel>
+        <StackPanel Grid.Row="3" HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Horizontal">
+            <Label Content="起始编码:" FontSize="15"/>
+            <TextBox  Margin="21,0,0,0" Height="30" Width="180"  VerticalAlignment="Center" Text="{Binding StartIndex}" />
+        </StackPanel>
+        <Button Grid.Row="4" HorizontalAlignment="Center" VerticalAlignment="Center" Height="35" Width="100"
+                Command="{Binding ConfirmCommand}" Content="编码"/>
+    </Grid>
+</Window>

@@ -204,6 +204,9 @@
     <Compile Include="Models\Export\ExportTotal\StatementsExport.cs" />
     <Compile Include="Models\FarmerModel.cs" />
     <Compile Include="Models\FieldModel.cs" />
+    <Compile Include="Models\Import\CbfInfoImport.cs" />
+    <Compile Include="Models\Import\FbfInfoImport.cs" />
+    <Compile Include="Models\Import\ImportBase.cs" />
     <Compile Include="Models\SortEnity.cs" />
     <Compile Include="Models\TdqqField.cs" />
     <Compile Include="Services\AE\AeHelper.cs" />
@@ -216,9 +219,12 @@
     <Compile Include="Services\Database\IDatabaseService.cs" />
     <Compile Include="Services\Database\MsAccessDatabase.cs" />
     <Compile Include="ViewModels\ArchiveViewModel.cs" />
+    <Compile Include="ViewModels\CbfbmViewModel.cs" />
+    <Compile Include="ViewModels\CbfInfoViewModel.cs" />
     <Compile Include="ViewModels\DkbmViewModel.cs" />
     <Compile Include="ViewModels\ExportViewModel.cs" />
     <Compile Include="ViewModels\FarmersViewModel.cs" />
+    <Compile Include="ViewModels\FbfInfoViewModel.cs" />
     <Compile Include="ViewModels\FieldsViewModel.cs" />
     <Compile Include="ViewModels\FieldViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
@@ -229,6 +235,12 @@
     <Compile Include="Views\ArchiveView.xaml.cs">
       <DependentUpon>ArchiveView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\CbfbmView.xaml.cs">
+      <DependentUpon>CbfbmView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\CbfInfoView.xaml.cs">
+      <DependentUpon>CbfInfoView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\DkbmView.xaml.cs">
       <DependentUpon>DkbmView.xaml</DependentUpon>
     </Compile>
@@ -237,6 +249,9 @@
     </Compile>
     <Compile Include="Views\FarmersView.xaml.cs">
       <DependentUpon>FarmersView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\FbfInfoView.xaml.cs">
+      <DependentUpon>FbfInfoView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\FieldsView.xaml.cs">
       <DependentUpon>FieldsView.xaml</DependentUpon>
@@ -276,6 +291,14 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\CbfbmView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\CbfInfoView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\DkbmView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -285,6 +308,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\FarmersView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\FbfInfoView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -405,9 +432,7 @@
   <ItemGroup>
     <Resource Include="Resources\Images\accept.png" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Models\Import\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

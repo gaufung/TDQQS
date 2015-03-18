@@ -82,16 +82,16 @@
             </fluent:RibbonTabItem>
             <fluent:RibbonTabItem ReduceOrder="Default,Default,Default,Large,Large,Large,Other,Other,Other" Header="输入" FontSize="15">
                 <fluent:RibbonGroupBox  Header="承包方">
-                    <fluent:Button Text="承包方编码" LargeIcon="Resources\Images\excel.png" IsEnabled="{Binding IsOpen}"  />
-                    <fluent:Button Text="导入基础数据表" LargeIcon="Resources\Images\ImportInfo.png" IsEnabled="{Binding IsOpen}" />
+                    <fluent:Button Text="承包方编码" LargeIcon="Resources\Images\excel.png" IsEnabled="{Binding IsOpen}"  Command="{Binding CbfbmCommand}"/>
+                    <fluent:Button Text="导入基础数据表" LargeIcon="Resources\Images\ImportInfo.png" IsEnabled="{Binding IsOpen}" Command="{Binding InputCbfInfoCommand}"/>
                 </fluent:RibbonGroupBox>
                 <fluent:RibbonGroupBox  Header="发包方">
-                    <fluent:Button Text="导入发包方" LargeIcon="Resources\Images\Import.png" IsEnabled="{Binding IsOpen}" />
+                    <fluent:Button Text="导入发包方" LargeIcon="Resources\Images\Import.png" IsEnabled="{Binding IsOpen}" Command="{Binding InputFbfInfoCommand}"/>
                 </fluent:RibbonGroupBox>
             </fluent:RibbonTabItem>
             <fluent:RibbonTabItem ReduceOrder="Default,Default,Default,Large,Large,Large,Other,Other,Other" Header="帮助" FontSize="15">
                 <fluent:RibbonGroupBox  Header="帮助">
-                    <fluent:Button Text="帮助" LargeIcon="Resources\Images\Help.png" />
+                    <fluent:Button Text="帮助" LargeIcon="Resources\Images\Help.png" Command="{Binding HelpCommand}" />
                 </fluent:RibbonGroupBox>
             </fluent:RibbonTabItem>
         </fluent:Ribbon>

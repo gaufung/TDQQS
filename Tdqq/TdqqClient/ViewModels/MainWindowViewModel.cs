@@ -18,6 +18,7 @@ using TdqqClient.Commands;
 using TdqqClient.Models.Edit;
 using TdqqClient.Models.Export.ExportOne;
 using TdqqClient.Models.Export.ExportTotal;
+using TdqqClient.Models.Import;
 using TdqqClient.Services.AE;
 using TdqqClient.Services.Check;
 using TdqqClient.Services.Common;
@@ -113,6 +114,10 @@ namespace TdqqClient.ViewModels
             ExportRegisterCommand.ExecuteAction = new Action<object>(ExportRegister);
             ExportArchiveCommand.ExecuteAction=new Action<object>(ExportArchive);
             ExportFarmerArchiveCommand.ExecuteAction=new Action<object>(ExportFarmerArchive);
+            CbfbmCommand.ExecuteAction=new Action<object>(Cbfbm);
+            InputCbfInfoCommand.ExecuteAction=new Action<object>(ImportCbfInfo);
+            InputFbfInfoCommand.ExecuteAction=new Action<object>(ImportFbfInfo);
+            HelpCommand.ExecuteAction=new Action<object>(Help);
             InitAxMapControlEvent();
         }
 
@@ -156,6 +161,10 @@ namespace TdqqClient.ViewModels
             ExportRegisterCommand = new DelegateCommand();
             ExportArchiveCommand=new DelegateCommand();
             ExportFarmerArchiveCommand=new DelegateCommand();
+            CbfbmCommand=new DelegateCommand();
+            this.InputCbfInfoCommand=new DelegateCommand();
+            this.InputFbfInfoCommand=new DelegateCommand();
+            HelpCommand=new DelegateCommand();
         }
 
         #region 打开和关闭地图
@@ -986,6 +995,41 @@ namespace TdqqClient.ViewModels
             ExportViewModel exportVm=new ExportViewModel(_personDatabase,_selectFeauture,_basicDatabase);
             ExportView exportV=new ExportView(exportVm);
             exportV.ShowDialog();
+        }
+        #endregion
+
+        #region 输入信息查询
+
+        public DelegateCommand CbfbmCommand { get; set; }
+
+        private void Cbfbm(object parameter)
+        {
+            CbfbmViewModel cbfbmVm=new CbfbmViewModel();
+            CbfbmView cbfbmV=new CbfbmView(cbfbmVm);
+            cbfbmV.ShowDialog();
+        }
+
+        public DelegateCommand InputCbfInfoCommand { get; set; }
+
+        private void ImportCbfInfo(object parameter)
+        {
+            ImportBase import=new CbfInfoImport(_basicDatabase);
+            import.Import();
+        }
+
+        public DelegateCommand InputFbfInfoCommand { get; set; }
+
+        private void ImportFbfInfo(object parameter)
+        {
+            ImportBase import = new FbfInfoImport(_basicDatabase);
+            import.Import();
+        }
+
+        public DelegateCommand HelpCommand { get; set; }
+
+        private void Help(object parameter)
+        {
+            
         }
         #endregion
     }
