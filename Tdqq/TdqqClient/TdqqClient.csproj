@@ -155,6 +155,8 @@
     <Compile Include="Commands\DelegateCommand.cs" />
     <Compile Include="Commands\ExCommandParameter.cs" />
     <Compile Include="Commands\ExInvokeCommandAction.cs" />
+    <Compile Include="Models\CbfjtcyModel.cs" />
+    <Compile Include="Models\CbfModel.cs" />
     <Compile Include="Models\DkInfo.cs" />
     <Compile Include="Models\Edit\EditCbfbm.cs" />
     <Compile Include="Models\Edit\EditCbfmc.cs" />

@@ -1,14 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data.OleDb;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using TdqqClient.ViewModels;
 using TdqqClient.Views;
 
 namespace TdqqClient.Models.Import
 {
+    /// <summary>
+    /// 导入发包方信息
+    /// </summary>
     class FbfInfoImport:ImportBase
     {
         public FbfInfoImport(string basicDatabase) : base(basicDatabase)
@@ -17,8 +17,9 @@ namespace TdqqClient.Models.Import
 
         public override void Import()
         {
-            FbfInfoViewModel fbfInfoVm=new FbfInfoViewModel();
-            FbfInfoView fbfInfoV=new FbfInfoView(fbfInfoVm);
+            
+            var fbfInfoVm = new FbfInfoViewModel();
+            var fbfInfoV=new FbfInfoView(fbfInfoVm);
             fbfInfoV.ShowDialog();
             if (fbfInfoVm.IsConfirm)
             {
@@ -40,37 +41,40 @@ namespace TdqqClient.Models.Import
             try
             {
                 DeleteTable("FBF");
-                string connectionString = "Provider=Microsoft.Jet.OLEDB.4.0;" + "data source=" + BasicDatabase;
-                string queryString = "Insert Into [FBF] ([FBFBM],[FBFMC],[FBFFZRXM],[FZRZJLX],[FZRZJHM],[LXDH],[FBFDZ],[YZBM],[FBFDCY],[FBFDCJS],[FBFDCRQ]) " +
+                var connectionString = "Provider=Microsoft.Jet.OLEDB.4.0;" + "data source=" + BasicDatabase;
+                const string queryString = "Insert Into [FBF] ([FBFBM],[FBFMC],[FBFFZRXM],[FZRZJLX],[FZRZJHM],[LXDH],[FBFDZ],[YZBM],[FBFDCY],[FBFDCJS],[FBFDCRQ]) " +
                             "Values(@fbfbm, @fbfmc, @fbffzrxm, @fzrzjlx,@fzrzjhm,@lxdh,@fbfdz,@yzbm,@fbfdcy,@fbfdcjs,@fbffdrq)";
                 var cn = new OleDbConnection(connectionString);
                 cn.Open();
                 var cmd = new OleDbCommand(queryString, cn);
-                cmd.Parameters.AddWithValue("@fbfbm", fbfInfoVm.Fbfbm);
-                cmd.Parameters.AddWithValue("@fbfmc", fbfInfoVm.Fbfmc);
-                cmd.Parameters.AddWithValue("@fbffzrxm", fbfInfoVm.Fzrxm);
-                cmd.Parameters.AddWithValue("@fzrzjlx", fbfInfoVm.Fzrzjlx.Code);
-                cmd.Parameters.AddWithValue("@fzrzjhm", fbfInfoVm.Zjhm);
-                cmd.Parameters.AddWithValue("@lxdh", fbfInfoVm.Lxdh);
-                cmd.Parameters.AddWithValue("@fbfdz", fbfInfoVm.Fbfdz);
-                cmd.Parameters.AddWithValue("@yzbm", fbfInfoVm.Yzbm);
-                cmd.Parameters.AddWithValue("@fbfdcy", fbfInfoVm.Dcy);
-                cmd.Parameters.AddWithValue("@fbfdcjs", fbfInfoVm.Dcjs);
-                var parameter = new OleDbParameter();
-                parameter.OleDbType = OleDbType.DBDate;
-                parameter.Value = fbfInfoVm.Dcrq;
-                cmd.Parameters.Add(parameter);
+                AddParameters(cmd,fbfInfoVm);
                 var ret = cmd.ExecuteNonQuery();
                 cn.Close();
                 cn.Dispose();
                 return ret == -1 ? false : true;
             }
             catch (Exception e)
-            {
-                MessageBox.Show(e.ToString());
+            { 
                 return false;
-            }
-           
+            }           
+        }
+
+        private void AddParameters(OleDbCommand cmd,FbfInfoViewModel fbfInfoVm)
+        {
+            cmd.Parameters.AddWithValue("@fbfbm", fbfInfoVm.Fbfbm);
+            cmd.Parameters.AddWithValue("@fbfmc", fbfInfoVm.Fbfmc);
+            cmd.Parameters.AddWithValue("@fbffzrxm", fbfInfoVm.Fzrxm);
+            cmd.Parameters.AddWithValue("@fzrzjlx", fbfInfoVm.Fzrzjlx.Code);
+            cmd.Parameters.AddWithValue("@fzrzjhm", fbfInfoVm.Zjhm);
+            cmd.Parameters.AddWithValue("@lxdh", fbfInfoVm.Lxdh);
+            cmd.Parameters.AddWithValue("@fbfdz", fbfInfoVm.Fbfdz);
+            cmd.Parameters.AddWithValue("@yzbm", fbfInfoVm.Yzbm);
+            cmd.Parameters.AddWithValue("@fbfdcy", fbfInfoVm.Dcy);
+            cmd.Parameters.AddWithValue("@fbfdcjs", fbfInfoVm.Dcjs);
+            var parameter = new OleDbParameter();
+            parameter.OleDbType = OleDbType.DBDate;
+            parameter.Value = fbfInfoVm.Dcrq;
+            cmd.Parameters.Add(parameter);
         }
     }
 }

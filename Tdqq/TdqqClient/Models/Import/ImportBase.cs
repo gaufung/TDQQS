@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using TdqqClient.Services.Database;
+﻿using TdqqClient.Services.Database;
 
 namespace TdqqClient.Models.Import
 {
@@ -38,12 +34,8 @@ namespace TdqqClient.Models.Import
         /// 导入信息
         /// </summary>
         /// <returns></returns>
-        public virtual void Import()
-        {
-            
-        }
-
-        
-        
+        public virtual  void Import()
+        {            
+        }        
     }
 }
