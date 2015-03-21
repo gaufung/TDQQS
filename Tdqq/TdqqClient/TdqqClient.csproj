@@ -157,6 +157,7 @@
     <Compile Include="Commands\ExInvokeCommandAction.cs" />
     <Compile Include="Models\CbfjtcyModel.cs" />
     <Compile Include="Models\CbfModel.cs" />
+    <Compile Include="Models\DcShModel.cs" />
     <Compile Include="Models\DkInfo.cs" />
     <Compile Include="Models\Edit\EditCbfbm.cs" />
     <Compile Include="Models\Edit\EditCbfmc.cs" />
@@ -172,7 +173,8 @@
     <Compile Include="Models\Edit\EditSz.cs" />
     <Compile Include="Models\Edit\EditTopo.cs" />
     <Compile Include="Models\EntityCode.cs" />
-    <Compile Include="Models\Export\Export2Pdf.cs" />
+    <Compile Include="Models\FbfModel.cs" />
+    <Compile Include="Services\Export\Export2Pdf.cs" />
     <Compile Include="Models\Export\ExportBase.cs" />
     <Compile Include="Models\Export\ExportOne\AExport.cs" />
     <Compile Include="Models\Export\ExportOne\DelegateExport.cs" />
@@ -206,9 +208,9 @@
     <Compile Include="Models\Export\ExportTotal\StatementsExport.cs" />
     <Compile Include="Models\FarmerModel.cs" />
     <Compile Include="Models\FieldModel.cs" />
-    <Compile Include="Models\Import\CbfInfoImport.cs" />
-    <Compile Include="Models\Import\FbfInfoImport.cs" />
-    <Compile Include="Models\Import\ImportBase.cs" />
+    <Compile Include="Services\Export\ExportBase.cs" />
+    <Compile Include="Services\Export\IExport.cs" />
+    <Compile Include="Services\Import\IImport.cs" />
     <Compile Include="Models\SortEnity.cs" />
     <Compile Include="Models\TdqqField.cs" />
     <Compile Include="Services\AE\AeHelper.cs" />
@@ -220,6 +222,10 @@
     <Compile Include="Services\Common\Transcode.cs" />
     <Compile Include="Services\Database\IDatabaseService.cs" />
     <Compile Include="Services\Database\MsAccessDatabase.cs" />
+    <Compile Include="Services\Import\ImportBasic.cs" />
+    <Compile Include="Services\Import\ImportCbfjtcy.cs" />
+    <Compile Include="Services\Import\ImportFbf.cs" />
+    <Compile Include="Services\Import\ImportToDb.cs" />
     <Compile Include="ViewModels\ArchiveViewModel.cs" />
     <Compile Include="ViewModels\CbfbmViewModel.cs" />
     <Compile Include="ViewModels\CbfInfoViewModel.cs" />

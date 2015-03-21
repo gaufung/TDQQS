@@ -1,4 +1,6 @@
 ﻿using System.Data;
+using System.Data.OleDb;
+
 namespace TdqqClient.Services.Database
 {
     /// <summary>
@@ -26,5 +28,7 @@ namespace TdqqClient.Services.Database
         /// <param name="sqlString"></param>
         /// <returns></returns>
         object ExecuteScalar(string sqlString);
+
+        OleDbConnection Connnection();
     }
 }

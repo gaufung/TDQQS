@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
+﻿
 namespace TdqqClient.Models
 {
-    
-
+    /// <summary>
+    /// 地块模型
+    /// </summary>
     public  class FieldModel
     {
         public object ObjectId { get; set; }
@@ -19,9 +16,14 @@ namespace TdqqClient.Models
         public string Dknz { get; set; }       
         public string Dkxz { get; set; }
         public string Dkbz { get; set; }
-
         public double Yhtmj { get; set; }
-
-
+        public string Dkbzxx { get; set; }
+        public string Zjrxm { get; set; }
+        public string Cbfbm { get; set; }
+        public string Syqxz { get; set; }
+        public string Dklb { get; set; }
+        public string Dldj { get; set; }
+        public string Tdyt { get; set; }
+        public string Sfjbnt { get; set; }
     }
 }

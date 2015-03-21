@@ -95,5 +95,10 @@ namespace TdqqClient.Services.Database
             }
             return ret;
         }
+
+        public OleDbConnection Connnection()
+        {
+            return GetConnection();
+        }
     }
 }

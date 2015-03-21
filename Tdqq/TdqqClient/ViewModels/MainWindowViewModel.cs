@@ -18,10 +18,10 @@ using TdqqClient.Commands;
 using TdqqClient.Models.Edit;
 using TdqqClient.Models.Export.ExportOne;
 using TdqqClient.Models.Export.ExportTotal;
-using TdqqClient.Models.Import;
 using TdqqClient.Services.AE;
 using TdqqClient.Services.Check;
 using TdqqClient.Services.Common;
+using TdqqClient.Services.Import;
 using TdqqClient.Views;
 using MessageBox = System.Windows.Forms.MessageBox;
 
@@ -1013,16 +1013,16 @@ namespace TdqqClient.ViewModels
 
         private void ImportCbfInfo(object parameter)
         {
-            ImportBase import=new CbfInfoImport(_basicDatabase);
-            import.Import();
+            ImportBasic import=new ImportBasic(_basicDatabase);
+            import.ImportCbfjtcy();
         }
 
         public DelegateCommand InputFbfInfoCommand { get; set; }
 
         private void ImportFbfInfo(object parameter)
         {
-            ImportBase import = new FbfInfoImport(_basicDatabase);
-            import.Import();
+            ImportBasic import = new ImportBasic(_basicDatabase);
+            import.ImportFbf();
         }
 
         public DelegateCommand HelpCommand { get; set; }
