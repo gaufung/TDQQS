@@ -209,6 +209,7 @@
     <Compile Include="Models\FarmerModel.cs" />
     <Compile Include="Models\FieldModel.cs" />
     <Compile Include="Services\Export\ExportBase.cs" />
+    <Compile Include="Services\Export\ExportOne\AExport.cs" />
     <Compile Include="Services\Export\IExport.cs" />
     <Compile Include="Services\Import\IImport.cs" />
     <Compile Include="Models\SortEnity.cs" />

@@ -823,8 +823,8 @@ namespace TdqqClient.ViewModels
 
         private void ExportA(object parameter)
         {
-            AExport export=new AExport(_personDatabase,_selectFeauture,_basicDatabase);
-            export.Export(parameter);
+            var export = new Services.Export.ExportOne.AExport(_personDatabase, _selectFeauture, _basicDatabase);
+            export.Export();
         }
         /// <summary>
         /// 导出地块信息表
