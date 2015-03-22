@@ -886,8 +886,8 @@ namespace TdqqClient.ViewModels
 
         private void ExportPost(object parameter)
         {
-            PostExport export=new PostExport(_personDatabase,_selectFeauture,_basicDatabase);
-            export.Export(parameter);
+            var export = new TdqqClient.Services.Export.ExportOne.PostExport(_personDatabase, _selectFeauture, _basicDatabase);
+            export.Export();
         }
 
         /// <summary>
@@ -897,8 +897,8 @@ namespace TdqqClient.ViewModels
 
         private void ExportDelegate(object parameter)
         {
-            DelegateExport export=new DelegateExport(_personDatabase,_selectFeauture,_basicDatabase);
-            export.Export(parameter);
+            var export = new TdqqClient.Services.Export.ExportOne.DelegateExport(_personDatabase, _selectFeauture, _basicDatabase);
+            export.Export();
         }
 
         public DelegateCommand ExportJyqzCommand { get; set; }

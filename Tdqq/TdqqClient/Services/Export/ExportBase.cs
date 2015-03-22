@@ -1,7 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Windows;
+using Aspose.Pdf;
+using NPOI.HSSF.UserModel;
+using NPOI.SS.UserModel;
 using TdqqClient.Models;
 using TdqqClient.Services.Database;
+using HorizontalAlignment = NPOI.SS.UserModel.HorizontalAlignment;
+using VerticalAlignment = NPOI.SS.UserModel.VerticalAlignment;
 
 namespace TdqqClient.Services.Export
 {
@@ -35,7 +43,10 @@ namespace TdqqClient.Services.Export
         {
             var cbfModels = new List<CbfModel>();
             var farmers = Cbfbms(isValid);
-            _pDatabaseService = new MsAccessDatabase(BasicDatabase);
+            if (farmers==null)
+            {
+                return null;
+            }
             foreach (var farmer in farmers)
             {
                 var cbfModel = Cbf(farmer.Cbfbm);
@@ -60,6 +71,7 @@ namespace TdqqClient.Services.Export
                         "CBF", cbfbm);
             _pDatabaseService = new MsAccessDatabase(BasicDatabase);
             var dt = _pDatabaseService.Query(sqlString);
+            _pDatabaseService = null;
             if (dt == null || dt.Rows.Count != 1) return new CbfModel();
             return new CbfModel()
             {
@@ -108,6 +120,7 @@ namespace TdqqClient.Services.Export
                     Sfgyr = dt.Rows[i][10].ToString().Trim(),
                 });
             }
+            _pDatabaseService = null;
             return cbfjtcys;
         }
 
@@ -122,7 +135,11 @@ namespace TdqqClient.Services.Export
                 string.Format("Select FBFMC,FBFBM,FBFFZRXM,FZRZJLX,FZRZJHM,LXDH,FBFDZ,YZBM,FBFDCY,FBFDCRQ,FBFDCJS " +
                               "From FBF");
             var dt = _pDatabaseService.Query(sqlString);
-            if (dt==null||dt.Rows.Count!=1)return null;
+            if (dt == null || dt.Rows.Count != 1)
+            {
+                _pDatabaseService = null;
+                return null;
+            }
             return new FbfModel()
             {
                 Fbfmc = dt.Rows[0][0].ToString().Trim(),
@@ -150,6 +167,7 @@ namespace TdqqClient.Services.Export
             var sqlString = string.Format("Select distinct CBFDCRQ,CBFDCY,CBFDCJS,GSJS,GSJSR,GSSHRQ,GSSHR From CBF");
             var dt = _pDatabaseService.Query(sqlString);
             if (dt == null || dt.Rows.Count == 0) return null;
+            _pDatabaseService = null;
             return new DcShModel()
             {
                 Cbfdcrq = string.IsNullOrEmpty(dt.Rows[0][0].ToString().Trim())
@@ -161,6 +179,7 @@ namespace TdqqClient.Services.Export
                 Gsshrq = string.IsNullOrEmpty(dt.Rows[0][5].ToString().Trim())?DateTime.Now:Convert.ToDateTime(dt.Rows[0][5].ToString().Trim()),
                 Gsshr = dt.Rows[0][6].ToString().Trim()                
             };
+
         }
 
         protected List<FieldModel> Fields(string cbfbm)
@@ -168,7 +187,7 @@ namespace TdqqClient.Services.Export
             _pDatabaseService=new MsAccessDatabase(PersonDatabase);
             var sqlString =
                 string.Format(
-                    "Select OBJECTID, DKMC,CBFMC,DKBM,SCMJ,HTMJ,DKDZ,DKNZ,DKXZ,DKBZ,YHTMJ,DKBZXX,ZJRXM,CBFBM,SYQXZ,DKLB,DLDJ" +
+                    "Select OBJECTID,DKMC,CBFMC,DKBM,SCMJ,HTMJ,DKDZ,DKNZ,DKXZ,DKBZ,YHTMJ,DKBZXX,ZJRXM,CBFBM,SYQXZ,DKLB,DLDJ," +
                     "TDYT,SFJBNT From {0} where CBFBM='{1}'", SelectFeature, cbfbm);
             var dt = _pDatabaseService.Query(sqlString);
             if (dt == null || dt.Rows.Count == 0) return null;
@@ -201,6 +220,7 @@ namespace TdqqClient.Services.Export
                     Sfjbnt = dt.Rows[i][18].ToString().Trim()
                 });
             }
+            _pDatabaseService = null;
             return fields;
         } 
         #endregion
@@ -224,16 +244,106 @@ namespace TdqqClient.Services.Export
                 sqlString = string.Format("Select Distinct CBFBM,CBFMC From {0} order by CBFBM ", SelectFeature); 
             }            
             var dt = _pDatabaseService.Query(sqlString);
+            if (dt==null)
+            {
+                return null;
+            }
+            var farmers=new List<FarmerModel>();           
+            for (int i = 0; i < dt.Rows.Count; i++)
+            {
+           
+                farmers.Add(new FarmerModel()
+                {
+                        Cbfbm = dt.Rows[i][0].ToString().Trim(),
+                        Cbfmc = dt.Rows[i][1].ToString().Trim()
+               }); 
+
+             }
+            _pDatabaseService = null;
+            return farmers;
+        }
+
+        #region Excel表修饰
+         /// <summary>
+        /// 合并单元格样式
+        /// </summary>
+        /// <param name="workbook">工作簿</param>
+        /// <returns>样式</returns>
+        protected ICellStyle MergetStyle(IWorkbook workbook)
+        {
+            ICellStyle style = workbook.CreateCellStyle();
+            style.Alignment = HorizontalAlignment.CENTER;
+            style.VerticalAlignment = VerticalAlignment.CENTER;
+            style.BorderBottom = BorderStyle.THIN;
+            style.BorderRight = BorderStyle.THIN;
+            style.BorderLeft = BorderStyle.THIN;
+            style.BorderTop = BorderStyle.THIN;
+            style.WrapText = true;
+            return style;
+        }
+        /// <summary>
+        /// 编辑四至，如果获取的四至中有下划线开始，去掉下划线
+        /// </summary>
+        /// <param name="sz">从数据库中获取的四至信息</param>
+        /// <returns>去掉的下划线的结果</returns>
+        protected string EditSz(string sz)
+        {
+            return sz.StartsWith("_") ? sz.Substring(1) : sz;
+        }
+        /// <summary>
+        /// 导出姓名索引表
+        /// </summary>
+        /// <param name="excelPath"></param>
+        protected void ExportIndexTable(string excelPath)
+        {
+            var farmers = Farmers();
+            var sortedFarmers = farmers.OrderBy(f => f.Cbfmc);
+            using (var fileStream = new FileStream(excelPath, FileMode.Open, FileAccess.ReadWrite))
+            {
+                IWorkbook workbook = new HSSFWorkbook(fileStream);
+                //在姓名排序模板的sheet2中
+                ISheet sheet = workbook.GetSheetAt(1);
+                int startRow = 2;
+                int rowCount = 7;
+                int index = 0;
+                foreach (var farmer in sortedFarmers)
+                {
+                    int currentRow = startRow + index / rowCount;
+                    IRow row = sheet.GetRow(currentRow);
+                    row.GetCell(index % rowCount * 2).SetCellValue((farmer.Index).ToString());
+                    row.GetCell(index % rowCount * 2 + 1).SetCellValue(farmer.Cbfmc);
+                    index++;
+                }
+                int endRow = startRow + index / rowCount + 1;
+                for (int i = sheet.LastRowNum; i >= endRow + 1; i--)
+                {
+                    sheet.ShiftRows(i, i + 1, -1);
+                }
+                var fs = new FileStream(excelPath, FileMode.Create, FileAccess.Write);
+                workbook.Write(fs);
+                fs.Close();
+                fileStream.Close();
+            }
+        }
+        /// <summary>
+        /// 获取所有农户的信息
+        /// </summary>
+        /// <returns></returns>
+        protected IEnumerable<FarmerModel> Farmers()
+        {
+            var sqlString = string.Format("select distinct CBFBM,CBFMC from {0} order by CBFBM", SelectFeature);
+            IDatabaseService pDatabaseService = new MsAccessDatabase(PersonDatabase);
+            var dt = pDatabaseService.Query(sqlString);
             for (int i = 0; i < dt.Rows.Count; i++)
             {
                 yield return new FarmerModel()
                 {
-                    Cbfbm = dt.Rows[0].ToString().Trim(),
-                    Cbfmc = dt.Rows[1].ToString().Trim()
+                    Index = i + 1,
+                    Cbfbm = dt.Rows[i][0].ToString().Trim(),
+                    Cbfmc = dt.Rows[i][1].ToString().Trim()
                 };
             }
         }
-
-
+        #endregion
     }
 }

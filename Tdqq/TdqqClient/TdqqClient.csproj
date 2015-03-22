@@ -210,6 +210,12 @@
     <Compile Include="Models\FieldModel.cs" />
     <Compile Include="Services\Export\ExportBase.cs" />
     <Compile Include="Services\Export\ExportOne\AExport.cs" />
+    <Compile Include="Services\Export\ExportOne\DelegateExport.cs" />
+    <Compile Include="Services\Export\ExportOne\DExport.cs" />
+    <Compile Include="Services\Export\ExportOne\FamilyExport.cs" />
+    <Compile Include="Services\Export\ExportOne\ListExport.cs" />
+    <Compile Include="Services\Export\ExportOne\OpenExport.cs" />
+    <Compile Include="Services\Export\ExportOne\PostExport.cs" />
     <Compile Include="Services\Export\IExport.cs" />
     <Compile Include="Services\Import\IImport.cs" />
     <Compile Include="Models\SortEnity.cs" />
