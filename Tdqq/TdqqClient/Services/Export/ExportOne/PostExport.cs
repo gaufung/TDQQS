@@ -137,15 +137,10 @@ namespace TdqqClient.Services.Export.ExportOne
         /// <returns></returns>
         private int GetFieldCount()
         {
-            var cbfs = Cbfs(false);
-            int count = 0;
-            foreach (var cbfModel in cbfs)
-            {
-                 var fields = Fields(cbfModel.Cbfbm);
-                count += fields.Count;
-            }
-
-            return count;
+            var query = from cbf in Cbfs(false)
+                from field in Fields(cbf.Cbfbm)
+                select field;
+            return query.Count();
         }
 
         /// <summary>
@@ -155,25 +150,11 @@ namespace TdqqClient.Services.Export.ExportOne
         private double? GetArea()
         {
 
-            
-            double area = 0.0;
-            
-            var cbfs = Cbfs(false);
-            foreach (var cbf in cbfs)
-            {
-                var fields = Fields(cbf.Cbfbm);
-                foreach (var field in fields)
-                {
-                    area += field.Scmj;
-                }
-            }
-            return area;
-            /*
             var query = from cbf in Cbfs(false)
                 from field in Fields(cbf.Cbfbm)
                 select field.Scmj;
             return query.Sum();
-             *  */
+             
         }
     }
 }

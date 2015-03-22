@@ -103,8 +103,9 @@ namespace TdqqClient.Services.Export.ExportOne
                 doc.Save(saveDocPath, SaveFormat.Doc);
                 para["ret"] = true;
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                MessageBox.Show(e.ToString());
                 para["ret"] = false;
             }
             finally

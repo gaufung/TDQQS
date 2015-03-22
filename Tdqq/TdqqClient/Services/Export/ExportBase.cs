@@ -43,10 +43,6 @@ namespace TdqqClient.Services.Export
         {
             var cbfModels = new List<CbfModel>();
             var farmers = Cbfbms(isValid);
-            if (farmers==null)
-            {
-                return null;
-            }
             foreach (var farmer in farmers)
             {
                 var cbfModel = Cbf(farmer.Cbfbm);
@@ -236,18 +232,14 @@ namespace TdqqClient.Services.Export
             string sqlString;
             if (isValid)
             {
-                sqlString = string.Format("Select Distinct CBFBM,CBFMC From {0} Where CBFBM Not Like {1} order by CBFBM ",
+                sqlString = string.Format("Select distinct CBFBM,CBFMC From {0} where CBFBM NOT LIKE  '{1}' order by CBFBM ",
                     SelectFeature, "99999999999999%");
             }
             else
             {
-                sqlString = string.Format("Select Distinct CBFBM,CBFMC From {0} order by CBFBM ", SelectFeature); 
+                sqlString = string.Format("Select distinct CBFBM,CBFMC From {0} order by CBFBM ", SelectFeature); 
             }            
             var dt = _pDatabaseService.Query(sqlString);
-            if (dt==null)
-            {
-                return null;
-            }
             var farmers=new List<FarmerModel>();           
             for (int i = 0; i < dt.Rows.Count; i++)
             {
