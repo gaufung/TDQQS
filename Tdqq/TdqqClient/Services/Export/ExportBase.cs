@@ -64,7 +64,7 @@ namespace TdqqClient.Services.Export
         {
             var sqlString =
                     string.Format(
-                        "Select CBFLX,CYXB,CBFZJLX,CBFZJHM,CBFDZ,YZBM,LXDH,CBFCYSL From {0} where CBFBM='{1}' ",
+                        "Select CBFLX,CYXB,CBFZJLX,CBFZJHM,CBFDZ,YZBM,LXDH,CBFCYSL,CBFMC From {0} where CBFBM='{1}' ",
                         "CBF", cbfbm);
             _pDatabaseService = new MsAccessDatabase(BasicDatabase);
             var dt = _pDatabaseService.Query(sqlString);
@@ -72,6 +72,7 @@ namespace TdqqClient.Services.Export
             if (dt == null || dt.Rows.Count != 1) return new CbfModel();
             return new CbfModel()
             {
+                Cbfbm = cbfbm,
                 Cbflx = dt.Rows[0][0].ToString().Trim(),
                 Cyxb = dt.Rows[0][1].ToString().Trim(),
                 Cbfzjlx = dt.Rows[0][2].ToString().Trim(),
@@ -79,7 +80,9 @@ namespace TdqqClient.Services.Export
                 Cbfdz = dt.Rows[0][4].ToString().Trim(),
                 Yzbm = dt.Rows[0][5].ToString().Trim(),
                 Lxdh = dt.Rows[0][6].ToString().Trim(),
-                Cbfcysl = Convert.ToInt32(dt.Rows[0][7].ToString().Trim())
+                Cbfcysl = Convert.ToInt32(dt.Rows[0][7].ToString().Trim()),
+                Cbfmc = dt.Rows[0][8].ToString().Trim()
+                
             };
         }
         #endregion
@@ -104,17 +107,25 @@ namespace TdqqClient.Services.Export
                 {
                     cbfjtcys.Add(new CbfjtcyModel()
                     {
-                        Cbfbm = dt.Rows[i][0].ToString().Trim(),
+                        Cbfbm = cbfbm,
                         Cbfmc = dt.Rows[i][1].ToString().Trim(),
                         Cyxb = dt.Rows[i][2].ToString().Trim(),
                         Cyxm = dt.Rows[i][3].ToString().Trim(),
-                        Cyzjhm = dt.Rows[i][4].ToString().Trim(),
-                        Cyzjlx = dt.Rows[i][5].ToString().Trim(),
-                        Cybz = dt.Rows[i][6].ToString().Trim(),
+                        Cyzjhm = string.IsNullOrEmpty(dt.Rows[i][4].ToString().Trim()) 
+                            ? string.Empty : dt.Rows[i][4].ToString().Trim(),
+                        Cyzjlx = string.IsNullOrEmpty(dt.Rows[i][5].ToString().Trim())
+                            ? string.Empty : dt.Rows[i][5].ToString().Trim(),
+                        Cybz = string.IsNullOrEmpty(dt.Rows[i][6].ToString().Trim()) 
+                            ? string.Empty : dt.Rows[i][6].ToString().Trim(),
                         Yhzgx = dt.Rows[i][7].ToString().Trim(),
-                        Cyszc = dt.Rows[i][8].ToString().Trim(),
-                        Lxdh = dt.Rows[i][9].ToString().Trim(),
-                        Sfgyr = dt.Rows[i][10].ToString().Trim(),
+                        Cyszc = string.IsNullOrEmpty(dt.Rows[i][8].ToString().Trim()) 
+                            ? string.Empty : dt.Rows[i][8].ToString().Trim(),
+                        Yzbm = string.IsNullOrEmpty(dt.Rows[i][9].ToString().Trim())
+                            ? string.Empty : dt.Rows[i][9].ToString().Trim(),
+                        Lxdh = string.IsNullOrEmpty(dt.Rows[i][10].ToString().Trim()) 
+                            ? string.Empty : dt.Rows[i][10].ToString().Trim(),
+                        Sfgyr =string.IsNullOrEmpty(dt.Rows[i][11].ToString().Trim()) 
+                            ? string.Empty : dt.Rows[i][11].ToString().Trim()
                     });
                 }
             }                        

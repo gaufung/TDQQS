@@ -15,12 +15,10 @@ using ESRI.ArcGIS.Geometry;
 using ESRI.ArcGIS.Geoprocessor;
 using TdqqClient.Commands;
 using TdqqClient.Models.Edit;
-using TdqqClient.Models.Export;
-using TdqqClient.Models.Export.ExportTotal;
 using TdqqClient.Services.AE;
 using TdqqClient.Services.Check;
 using TdqqClient.Services.Common;
-using TdqqClient.Services.Export.ExportSingle;
+using TdqqClient.Services.Export;
 using TdqqClient.Services.Export.ExportTotal;
 using TdqqClient.Services.Import;
 using TdqqClient.Views;
@@ -1006,7 +1004,7 @@ namespace TdqqClient.ViewModels
 
         private void ExportArchive(object parameter)
         {
-            ArchivesExport export=new ArchivesExport(_personDatabase,_selectFeauture,_basicDatabase);
+            var export = new TdqqClient.Services.Export.ArchivesExport(_personDatabase, _selectFeauture, _basicDatabase);
             export.Export();
         }
         public DelegateCommand ExportFarmerArchiveCommand { get; set; }

@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -10,7 +9,7 @@ using Aspose.Pdf.Facades;
 using TdqqClient.ViewModels;
 using TdqqClient.Views;
 
-namespace TdqqClient.Models.Export.ExportTotal
+namespace TdqqClient.Services.Export
 {
     /// <summary>
     /// 导出按照农户所有
@@ -61,13 +60,13 @@ namespace TdqqClient.Models.Export.ExportTotal
             var archiveVm = para["archiveVm"] as ArchiveViewModel;
             try
             {
-                var dt = SelectCbfbmOwnFields();
-                int rowCount = dt.Rows.Count;
-                for (int i = 0; i < rowCount; i++)
+                var cbfs = Cbfs(true);
+                int count = cbfs.Count;
+                for (int i = 0; i < count; i++)
                 {
-                    wait.SetProgress((double)i/(double)rowCount);
-                    var cbfmc = dt.Rows[i][1].ToString().Trim();
-                    var cbfbm = dt.Rows[i][0].ToString().Trim();
+                    wait.SetProgress((double)i/(double)count);
+                    var cbfmc = cbfs[i].Cbfmc;
+                    var cbfbm = cbfs[i].Cbfbm;
                     MergePdfFiles(cbfbm,cbfmc,archiveVm);
                 }
                 para["ret"] = true;

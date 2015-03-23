@@ -1,16 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using Aspose.Pdf.Facades;
 using TdqqClient.Commands;
-using TdqqClient.Models;
-using TdqqClient.Models.Export;
-using TdqqClient.Models.Export.ExportSingle;
 using TdqqClient.Services.Common;
 using TdqqClient.Services.Database;
+using TdqqClient.Services.Export;
+using TdqqClient.Services.Export.ExportSingle;
+using TdqqClient.Models;
 using TdqqClient.Views;
 
 namespace TdqqClient.ViewModels
@@ -103,7 +101,7 @@ namespace TdqqClient.ViewModels
                  export.Export(SelectFarmer.Cbfmc, SelectFarmer.Cbfbm, folderPath);
                  export = new RegisterExport(_personDatabase, _selectFeature, _basicDatabase);
                  export.Export(SelectFarmer.Cbfmc, SelectFarmer.Cbfbm, folderPath);
-                ConnectPdfFile(folderPath);
+                 ConnectPdfFile(folderPath);
                 return true;
             }
             catch (Exception e)
@@ -184,7 +182,8 @@ namespace TdqqClient.ViewModels
         {
             try
             {
-                JyqzExport export = new JyqzExport(_personDatabase, _selectFeature, _basicDatabase);
+                var export = new TdqqClient.Services.Export.ExportSingle.
+                    JyqzExport(_personDatabase, _selectFeature, _basicDatabase);
                 export.Export(SelectFarmer.Cbfmc, SelectFarmer.Cbfbm, folderPath);
                 return true;
             }
