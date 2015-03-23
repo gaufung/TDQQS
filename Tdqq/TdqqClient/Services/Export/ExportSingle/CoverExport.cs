@@ -1,42 +1,47 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Aspose.Words;
 
-namespace TdqqClient.Models.Export.ExportSingle
+namespace TdqqClient.Services.Export.ExportSingle
 {
+    /// <summary>
+    /// 导出档案局封面
+    /// </summary>
     class CoverExport:ExportBase
     {
 
         public CoverExport(string personDatabase, string selectFeauture, string basicDatabase)
             : base(personDatabase, selectFeauture, basicDatabase)
-        {   }
+        { }
 
         public override void Export(string cbfmc, string cbfbm, string folderPath, string edgeFeature = "")
         {
             var saveFilePath = folderPath + @"\" + cbfbm.Substring(14) + "_" + cbfmc + "_00档案局目录.pdf";
-            ExportDoc(saveFilePath,cbfmc,cbfbm);
+            ExportDoc(saveFilePath, cbfmc, cbfbm);
         }
-
-        private void ExportDoc(string savedDocPathStatement, string cbfmc,string cbfbm)
+        /// <summary>
+        /// 导出某一个封面
+        /// </summary>
+        /// <param name="saveFilePath">路径</param>
+        /// <param name="cbfmc">承包方名称</param>
+        /// <param name="cbfbm">承包方编码</param>
+        private void ExportDoc(string saveFilePath, string cbfmc, string cbfbm)
         {
-            /*   "select FBFBM,FBFMC,FBFFZRXM,FZRZJLX,FZRZJHM,LXDH,FBFDZ,YZBM,FBFDCY,FBFDCRQ,FBFDCJS from FBF");*/
-            var dtFbf = SelectFbfInfo();
+            
+            var dtFbf = Fbf();
             if (dtFbf == null) return;
-            var fbfdz = dtFbf[6].ToString().Trim();
+            var fbfdz = Fbf().Fbfdz;
             var indexXian = fbfdz.IndexOf("县");
             var indexZhen = fbfdz.IndexOf("镇") == -1 ? fbfdz.IndexOf("乡") : fbfdz.IndexOf("镇");
             var indexCun = fbfdz.IndexOf("村");
             var zhen = fbfdz.Substring(indexXian + 1, indexZhen - indexXian - 1);
             var cun = fbfdz.Substring(indexZhen + 1, indexCun - indexZhen);
             var templatePath = AppDomain.CurrentDomain.BaseDirectory + @"\template\档案局目录.doc";
-            Document exportWord = new Document(templatePath);
+            var exportWord = new Document(templatePath);
             exportWord.Range.Bookmarks["cbfbm"].Text = cbfbm.Substring(14);
             exportWord.Range.Bookmarks["xiang"].Text = zhen;
             exportWord.Range.Bookmarks["cun"].Text = cun;
             exportWord.Range.Bookmarks["cbfmc"].Text = cbfmc;
-            exportWord.Save(savedDocPathStatement, SaveFormat.Pdf);
+            exportWord.Save(saveFilePath, SaveFormat.Pdf);
         }
     }
 }

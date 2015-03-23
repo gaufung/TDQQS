@@ -9,6 +9,7 @@ namespace TdqqClient.Models.Export.ExportSingle
 {
     class ContractExport:ExportBase
     {
+
         public ContractExport(string personDatabase, string selectFeauture, string basicDatabase)
             : base(personDatabase, selectFeauture, basicDatabase)
         {   }

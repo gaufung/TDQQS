@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Windows;
-using Aspose.Pdf;
 using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
 using TdqqClient.Models;
@@ -31,7 +29,10 @@ namespace TdqqClient.Services.Export
             BasicDatabase = basicDatabase;
         }
 
-       
+        public virtual void Export(string cbfmc, string cbfbm, string folderPath, string edgeFeature = "")
+        {
+
+        }
 
         #region 承包方信息
         /// <summary>

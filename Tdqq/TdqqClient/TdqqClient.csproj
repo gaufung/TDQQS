@@ -217,6 +217,12 @@
     <Compile Include="Services\Export\ExportOne\OpenExport.cs" />
     <Compile Include="Services\Export\ExportOne\PostExport.cs" />
     <Compile Include="Services\Export\ExportOne\SignExport.cs" />
+    <Compile Include="Services\Export\ExportSingle\AcceptExport.cs" />
+    <Compile Include="Services\Export\ExportSingle\CbfExport.cs" />
+    <Compile Include="Services\Export\ExportSingle\ContractExport.cs" />
+    <Compile Include="Services\Export\ExportSingle\CoverExport.cs" />
+    <Compile Include="Services\Export\ExportSingle\DkExport.cs" />
+    <Compile Include="Services\Export\ExportSingle\GhbExport.cs" />
     <Compile Include="Services\Export\IExport.cs" />
     <Compile Include="Services\Import\IImport.cs" />
     <Compile Include="Models\SortEnity.cs" />

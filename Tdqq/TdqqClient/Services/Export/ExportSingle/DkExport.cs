@@ -2,82 +2,71 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Runtime.InteropServices;
 using Aspose.Pdf.Facades;
 using ESRI.ArcGIS.Geodatabase;
 using ESRI.ArcGIS.Geometry;
 using NPOI.HSSF.UserModel;
-using NPOI.SS.Formula.Functions;
 using NPOI.SS.UserModel;
 using NPOI.SS.Util;
 using TdqqClient.Services.AE;
-using TdqqClient.Services.Database;
-using TdqqClient.Services.Export;
 
-
-namespace TdqqClient.Models.Export.ExportSingle
+namespace TdqqClient.Services.Export.ExportSingle
 {
     class DkExport:ExportBase
     {
 
         public DkExport(string personDatabase, string selectFeauture, string basicDatabase)
             : base(personDatabase, selectFeauture, basicDatabase)
-        {   }
+        { }
 
         public override void Export(string cbfmc, string cbfbm, string folderPath, string edgeFeature = "")
         {
-            var sqlString = string.Format("Select distinct CBFBM,CBFMC,OBJECTID,DKBM,DKMC From {0} where CBFBM ='{1}' ",
-                              SelectFeature, cbfbm);
-            IDatabaseService pDatabaseService=new MsAccessDatabase(PersonDatabase);
-            var dt = pDatabaseService.Query(sqlString);
+
+            var fields = Fields(cbfbm);
             var jzxFeature = SelectFeature + "_JZX";
             var jxdFeature = SelectFeature + "_JZD";
             //每个人按名字一行hashrow
-            Hashtable BM_IDHashTable = new Hashtable();
-            Hashtable BM_XMHashTable = new Hashtable();
-            Hashtable ID_BMHashTable = new Hashtable();
-            for (int i = 0; i < dt.Rows.Count; i++)
+            var bmIdHashTable = new Hashtable();
+            var bmXmHashTable = new Hashtable();
+            var idBmHashTable = new Hashtable();
+            for (int i = 0; i < fields.Count; i++)
             {
-                string tempDKOBJECT = dt.Rows[i][2] + "";
-                string tempCBFMC = dt.Rows[i][1] + "";
-                string tempCBFBM = dt.Rows[i][0] + "";
-                string tempDKBM = dt.Rows[i][3] + "";
+                string tempDKOBJECT = fields[i].ObjectId + "";
+                string tempCbfmc = fields[i].Cbfmc + "";
+                string tempCbfbm = fields[i].Cbfbm + "";
+                string tempDkbm = fields[i].Dkbm + "";
                 //Hashtable索引中是不是已经加载过CBFBM
-                if (BM_IDHashTable.Contains(tempCBFBM) == false)
-                    BM_IDHashTable.Add(tempCBFBM, tempDKOBJECT);
+                if (bmIdHashTable.Contains(tempCbfbm) == false)
+                    bmIdHashTable.Add(tempCbfbm, tempDKOBJECT);
                 else
-                    BM_IDHashTable[tempCBFBM] = BM_IDHashTable[tempCBFBM].ToString() + ',' + tempDKOBJECT;
+                    bmIdHashTable[tempCbfbm] = bmIdHashTable[tempCbfbm].ToString() + ',' + tempDKOBJECT;
 
-                if (BM_XMHashTable.Contains(tempCBFBM) == false)
-                    BM_XMHashTable.Add(tempCBFBM, tempCBFMC);
+                if (bmXmHashTable.Contains(tempCbfbm) == false)
+                    bmXmHashTable.Add(tempCbfbm, tempCbfmc);
 
-                if (ID_BMHashTable.Contains(tempDKOBJECT) == false)
-                    ID_BMHashTable.Add(tempDKOBJECT, tempDKBM);
+                if (idBmHashTable.Contains(tempDKOBJECT) == false)
+                    idBmHashTable.Add(tempDKOBJECT, tempDkbm);
             }
             int tempNum = 0;
-            List<string> errdkDKBMS = new List<string>();
-            List<int> ztdkObjects = new List<int>();
-            foreach (DictionaryEntry de in BM_IDHashTable)
+            var ztdkObjects = new List<int>();
+            foreach (DictionaryEntry de in bmIdHashTable)
             {
-               
-                string tempCBFBM = de.Key.ToString();
+
+                string tempCbfbm = de.Key.ToString();
                 //拿出承包方调查员日期等参数
-                Hashtable InfoHashTable = Getinfo(tempCBFBM);
+                Hashtable infoHashTable = Getinfo(tempCbfbm);
 
                 string tempObjectIDs = de.Value.ToString();
-                string[] objectIDS = tempObjectIDs.Split(',');
-                List<int> fids = new List<int>();
-                foreach (string s in objectIDS)
+                string[] objectIds = tempObjectIDs.Split(',');
+                var fids = new List<int>();
+                foreach (string s in objectIds)
                 {
                     fids.Add(Convert.ToInt32(s));
                 }
-                //Export(jzxFeature, jxdFeature, folderPath, dt.Rows[i]);
                 string singleFolderPath = folderPath;
-                string excelUrl = singleFolderPath + @"\" + tempCBFBM.Substring(14) + '_' + BM_XMHashTable[tempCBFBM] + '-' + "_02承包地块调查表_" + ".xls";
-                //   string excelUrl = singleFolderPath + @"\" + tempCBFBM.Substring(14) + "_02承包地块调查表_" + '_' + BM_XMHashTable[tempCBFBM] + '-' + ".xls";
-                //一个人对应地块所有的OBJECTID都放在fids里
-                List<int> twofids = new List<int>();
+                string excelUrl;
+                var twofids = new List<int>();
                 for (int i = 0; i < fids.Count; i++)
                 {
                     int jzNum = GetJZNum(PersonDatabase, fids[i], SelectFeature, jzxFeature, jxdFeature);
@@ -85,48 +74,39 @@ namespace TdqqClient.Models.Export.ExportSingle
                     {
                         throw new InvalidDataException("请做一次拓扑检查");
                     }
+                    if (jzNum > 9)
+                    {
+                        //新的把点分开，写到几个Excel
+                        excelUrl = singleFolderPath + @"\" + tempCbfbm.Substring(14) + '_' + bmXmHashTable[tempCbfbm] + "_02承包地块调查表" + '-' + fids[i] + ".xls";
+                        CreateManyCTable(PersonDatabase, fids[i], excelUrl, SelectFeature, jzxFeature, jxdFeature, infoHashTable);
+                        Export2Pdf.Excel2Pdf(excelUrl);
+                        ztdkObjects.Add(fids[i]);
+                    }
                     else
                     {
-                        if (jzNum > 9)
+                        twofids.Add(fids[i]);
+                        if (twofids.Count == 2)
                         {
-                            //新的把点分开，写到几个Excel
-                            excelUrl = singleFolderPath + @"\" + tempCBFBM.Substring(14) + '_' + BM_XMHashTable[tempCBFBM] + "_02承包地块调查表" + '-' + fids[i] + ".xls";
-                            CreateManyCTable(PersonDatabase, fids[i], excelUrl, SelectFeature, jzxFeature, jxdFeature, InfoHashTable);
+                            int[] tempArr = new int[2];
+                            tempArr[0] = twofids[0];
+                            tempArr[1] = twofids[1];
+                            excelUrl = singleFolderPath + @"\" + tempCbfbm.Substring(14) + '_' + bmXmHashTable[tempCbfbm] + "_02承包地块调查表" + '-' + tempArr[0] + '-' + tempArr[1] + ".xls";
+                            CreateOneC2Table(PersonDatabase, tempArr, excelUrl, SelectFeature, jzxFeature, jxdFeature, infoHashTable);
                             Export2Pdf.Excel2Pdf(excelUrl);
-                            // File.Delete(excelUrl);
-                            ztdkObjects.Add(fids[i]);
-                        }
-                        else
-                        {
-                            twofids.Add(fids[i]);
-                            if (twofids.Count == 2)
-                            {
-                                int[] tempArr = new int[2];
-                                tempArr[0] = twofids[0];
-                                tempArr[1] = twofids[1];
-                                excelUrl = singleFolderPath + @"\" + tempCBFBM.Substring(14) + '_' + BM_XMHashTable[tempCBFBM] + "_02承包地块调查表" + '-' + tempArr[0] + '-' + tempArr[1] + ".xls";
-                                CreateOneC2Table(PersonDatabase, tempArr, excelUrl, SelectFeature, jzxFeature, jxdFeature, InfoHashTable);
-                                Export2Pdf.Excel2Pdf(excelUrl);
-                                //  File.Delete(excelUrl);
-                                twofids.Clear();
-                            }
+                            twofids.Clear();
                         }
                     }
-
                 }
                 foreach (int f in twofids)
                 {
-                    excelUrl = singleFolderPath + @"\" + tempCBFBM.Substring(14) + '_' + BM_XMHashTable[tempCBFBM] + "_02承包地块调查表" + '-' + f + ".xls";
+                    excelUrl = singleFolderPath + @"\" + tempCbfbm.Substring(14) + '_' + bmXmHashTable[tempCbfbm] + "_02承包地块调查表" + '-' + f + ".xls";
 
-                    CreateOneCTable(PersonDatabase, f, excelUrl, SelectFeature, jzxFeature, jxdFeature, InfoHashTable);
+                    CreateOneCTable(PersonDatabase, f, excelUrl, SelectFeature, jzxFeature, jxdFeature, infoHashTable);
                     Export2Pdf.Excel2Pdf(excelUrl);
-                    //File.Delete(excelUrl);
                 }
                 tempNum = tempNum + 1;
             }
-
-            // ConvetFiles(folderPath, wait);
-           Concatenate(folderPath,cbfmc,cbfbm);    
+            Concatenate(folderPath, cbfmc, cbfbm);
             DeleteFiles(folderPath);
         }
 
@@ -136,22 +116,22 @@ namespace TdqqClient.Models.Export.ExportSingle
         /// <param name="folderPath">文件夹位置</param>
         /// <param name="cbfmc">承包方名称</param>
         /// <param name="cbfbm">承包方编码</param>
-        private void Concatenate(string folderPath,string cbfmc,string cbfbm)
+        private void Concatenate(string folderPath, string cbfmc, string cbfbm)
         {
-            
+
             var targetPdfPath = folderPath + @"\" + cbfbm.Substring(14) + "_" + cbfmc + "_" + "02承包地块调查表.pdf";
             var inFileStream = GetToMergePdf(folderPath, cbfbm);
-            var outFileStream = new FileStream(targetPdfPath, FileMode.Create);           
+            var outFileStream = new FileStream(targetPdfPath, FileMode.Create);
             var pdfEditor = new PdfFileEditor();
             pdfEditor.Concatenate(inFileStream.ToArray(), outFileStream);
             outFileStream.Close();
             foreach (var stream in inFileStream)
             {
-                 stream.Close();
+                stream.Close();
             }
         }
 
-     
+
 
         /// <summary>
         /// 获取该农户地块调查表
@@ -163,11 +143,6 @@ namespace TdqqClient.Models.Export.ExportSingle
         {
             var dir = new DirectoryInfo(folderPath);
             var listFile = new List<Stream>();
-            //var query = from dChild in dir.GetFiles("*.pdf")
-            //    let name = dChild.Name
-            //    where name.StartsWith(cbfbm)
-            //    select new FileStream(dChild.FullName, FileMode.Open);
-            //return query.Cast<Stream>();
             foreach (var dChild in dir.GetFiles("*.pdf"))
             {
                 var name = dChild.Name;
@@ -181,30 +156,14 @@ namespace TdqqClient.Models.Export.ExportSingle
 
         private Hashtable Getinfo(string cbfbm)
         {
-            /*CBFDCRQ
-             select CBFBM,CBFLX,CBFMC,CYXB,CBFZJLX,CBFZJHM,CBFDZ,YZBM,LXDH,CBFCYSL,CBFDCRQ,CBFDCY,CBFDCJS,GSJS,GSJSR,GSSHRQ," 
-             *        0     1      2    3   4       5       6       7   8   9       10      11      12      13    14    15
-             */
-            Hashtable tempHashTable = new Hashtable();
-            var rowCbf = SelectCbfInfoByCbfbm(cbfbm);
-            string cbfdcy = rowCbf[11].ToString() + "";
-
+            var tempHashTable = new Hashtable();
+            var dcsh = DcSh();
+            string cbfdcy = dcsh.Cbfdcy;
             tempHashTable.Add("dcy", cbfdcy);
-            var cbfdcrq = string.IsNullOrEmpty(rowCbf[10].ToString().Trim()) ? DateTime.Now : Convert.ToDateTime(rowCbf[10].ToString().Trim());
-            /*
-            string year = gsshrq.Year.ToString();
-            string month = gsshrq.Month.ToString();
-            string day = gsshrq.Day.ToString();
-             */
-            /*
-            tempHashTable.Add("year", year);
-            tempHashTable.Add("month", month);
-            tempHashTable.Add("day", day);
-             */
+            var cbfdcrq = dcsh.Cbfdcrq;            
             tempHashTable.Add("dcrq", cbfdcrq);
-            //"select FBFBM,FBFMC,FBFFZRXM,FZRZJLX,FZRZJHM,LXDH,FBFDZ,YZBM,FBFDCY,FBFDCRQ,FBFDCJS from FBF");
-            var rowFbf = SelectFbfInfo();
-            string fbffzr = rowFbf[2] + "";
+            var fbf = Fbf();
+            string fbffzr = fbf == null ? string.Empty : fbf.Fbffzrxm;
             tempHashTable.Add("fbffzr", fbffzr);
             return tempHashTable;
         }
@@ -232,7 +191,7 @@ namespace TdqqClient.Models.Export.ExportSingle
         }
         private int GetJZNum(string databaseUrl, int fid, string zdtname, string jzxname, string jzdname)
         {
-            IAeFactory pAeFactory=new PersonalGeoDatabase(databaseUrl);
+            IAeFactory pAeFactory = new PersonalGeoDatabase(databaseUrl);
             IFeatureWorkspace workspace = pAeFactory.OpenFeatrueWorkspace();
             IFeatureClass zdt = workspace.OpenFeatureClass(zdtname);
             IFeatureClass jzx = workspace.OpenFeatureClass(jzxname);
@@ -270,9 +229,6 @@ namespace TdqqClient.Models.Export.ExportSingle
                 return -1;
             else
                 return jzdList.Count;
-
-
-            return jzdList.Count > jzxList.Count ? jzdList.Count : jzxList.Count;
         }
 
         private bool CreateManyCTable(string databaseUrl, int fid, string outpath, string zdtname, string jzxname, string jzdname, Hashtable InfoHashTable)
@@ -297,7 +253,7 @@ namespace TdqqClient.Models.Export.ExportSingle
             }
             return false;
         }
-        private  bool CreateCManyTable(IFeatureWorkspace workspace, string outpath, IFeature zdtF, IFeatureClass jzx, IFeatureClass jzd, Hashtable tempHashTable)
+        private bool CreateCManyTable(IFeatureWorkspace workspace, string outpath, IFeature zdtF, IFeatureClass jzx, IFeatureClass jzd, Hashtable tempHashTable)
         {
             Hashtable InfoHashTable = tempHashTable;
             List<IFeature> jzdSorted = new List<IFeature>();
@@ -1226,7 +1182,7 @@ namespace TdqqClient.Models.Export.ExportSingle
             }
             return false;
         }
-        private  IFeature getRelationLine(IGeometry query, List<IFeature> fList)
+        private IFeature getRelationLine(IGeometry query, List<IFeature> fList)
         {
             IRelationalOperator rel = query as IRelationalOperator;
             IGeometry tmpgeo = null;
@@ -1242,7 +1198,7 @@ namespace TdqqClient.Models.Export.ExportSingle
             return null;
         }
 
-        private  IFeature getRelationPoint(IGeometry query, List<IFeature> fList)
+        private IFeature getRelationPoint(IGeometry query, List<IFeature> fList)
         {
             IRelationalOperator rel = query as IRelationalOperator;
             foreach (IFeature f in fList)
@@ -1256,7 +1212,7 @@ namespace TdqqClient.Models.Export.ExportSingle
             return null;
         }
 
-        private  bool CreateOneC2Table(string databaseUrl, int[] fids, string outpath, string zdtname, string jzxname, string jzdname, Hashtable InfoHashTable)
+        private bool CreateOneC2Table(string databaseUrl, int[] fids, string outpath, string zdtname, string jzxname, string jzdname, Hashtable InfoHashTable)
         {
             try
             {
@@ -1936,7 +1892,7 @@ namespace TdqqClient.Models.Export.ExportSingle
             }
             return false;
         }
-        private  bool CreateOneCTable(string databaseUrl, int fid, string outpath, string zdtname, string jzxname, string jzdname, Hashtable InfoHashTable)
+        private bool CreateOneCTable(string databaseUrl, int fid, string outpath, string zdtname, string jzxname, string jzdname, Hashtable InfoHashTable)
         {
             try
             {
@@ -1959,7 +1915,7 @@ namespace TdqqClient.Models.Export.ExportSingle
             }
             return false;
         }
-        private  bool CreateCTable(IFeatureWorkspace workspace, string outpath, IFeature zdtF, IFeatureClass jzx, IFeatureClass jzd, Hashtable InfoHashTable)
+        private bool CreateCTable(IFeatureWorkspace workspace, string outpath, IFeature zdtF, IFeatureClass jzx, IFeatureClass jzd, Hashtable InfoHashTable)
         {
 
             Hashtable tdytHashTable = new Hashtable();
@@ -2330,7 +2286,7 @@ namespace TdqqClient.Models.Export.ExportSingle
             }
             return false;
         }
-        public  void createRows(HSSFSheet sourceSheet, int rownum, int count)
+        public void createRows(HSSFSheet sourceSheet, int rownum, int count)
         {
             sourceSheet.ShiftRows(27, 34, count * 2, true, false, true);
             for (int i = 0; i < count; i++)
@@ -2356,7 +2312,7 @@ namespace TdqqClient.Models.Export.ExportSingle
 
 
         }
-        private   void createOneRow(HSSFSheet sourceSheet, int rownum)
+        private void createOneRow(HSSFSheet sourceSheet, int rownum)
         {
             var srcRow = sourceSheet.GetRow(rownum - 1);
             var newRow = sourceSheet.CreateRow(rownum);

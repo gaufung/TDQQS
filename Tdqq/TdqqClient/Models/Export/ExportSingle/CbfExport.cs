@@ -19,6 +19,7 @@ namespace TdqqClient.Models.Export.ExportSingle
             var saveFilePath = folderPath + @"\" + cbfbm.Substring(14) + "_" + cbfmc + "_01承包方调查表.pdf";
             ExportDoc(saveFilePath,cbfmc,cbfbm);
         }
+
         private void ExportDoc(string saveFilePath, string cbfmc,string cbfbm)
         {
             var templatePath = AppDomain.CurrentDomain.BaseDirectory + @"\template\承包方调查表.doc";   

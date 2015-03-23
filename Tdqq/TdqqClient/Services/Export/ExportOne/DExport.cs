@@ -60,7 +60,7 @@ namespace TdqqClient.Services.Export.ExportOne
             {
                 File.Copy(templatePath, saveFilePath, true);
                 int startRowIndex = 6;
-                var cbfs = Cbfs(false);
+                var cbfs = Cbfs(true);
                 using (var fileStream = new FileStream(saveFilePath, FileMode.Open, FileAccess.ReadWrite))
                 {
                     var workbookSource = new HSSFWorkbook(fileStream);
