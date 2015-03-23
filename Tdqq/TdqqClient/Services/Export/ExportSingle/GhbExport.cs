@@ -77,16 +77,15 @@ namespace TdqqClient.Services.Export.ExportSingle
                 #endregion
 
                 var dcSh = DcSh();
-                var gsjs = string.IsNullOrEmpty() ? "/" : cbf[13].ToString().Trim();
+                var gsjs = string.IsNullOrEmpty(dcSh.Gsjs) ? "/" : dcSh.Gsjs;
                 sheet.GetRow(19).GetCell(2).SetCellValue(gsjs);
 
 
-                sheet.GetRow(25).GetCell(4).SetCellValue(GetDcy());
-                sheet.GetRow(25).GetCell(8).SetCellValue(GetShrq(-2).ToLongDateString());
-                sheet.GetRow(32).GetCell(8).SetCellValue(GetShrq(-2).ToLongDateString());
-                //  sheet.GetRow(32).GetCell(4).SetCellValue(row[1].ToString());
-                sheet.GetRow(39).GetCell(8).SetCellValue(GetShrq().ToLongDateString());
-                FileStream fs = new FileStream(saveFilePath, FileMode.Create, FileAccess.Write);
+                sheet.GetRow(25).GetCell(4).SetCellValue(dcSh.Cbfdcy);
+                sheet.GetRow(25).GetCell(8).SetCellValue(dcSh.Gsshrq.Add(new TimeSpan(-2,0,0,0)).ToLongDateString());
+                sheet.GetRow(32).GetCell(8).SetCellValue(dcSh.Gsshrq.Add(new TimeSpan(-2, 0, 0, 0)).ToLongDateString());
+                sheet.GetRow(39).GetCell(8).SetCellValue(dcSh.Gsshrq.ToLongDateString());
+                var fs = new FileStream(saveFilePath, FileMode.Create, FileAccess.Write);
                 workbook.Write(fs);
                 fs.Close();
                 fileStream.Close();
@@ -95,9 +94,9 @@ namespace TdqqClient.Services.Export.ExportSingle
 
         private void ExportField(string saveFilePath, string cbfmc, string cbfbm)
         {
-            var dtCbdk = SelectFieldsByCbfbm(cbfbm);
-            if (dtCbdk == null) return;
-            using (FileStream fileStream = new FileStream(saveFilePath, FileMode.Open, FileAccess.ReadWrite))
+            var fields = Fields(cbfbm);
+            if (fields == null) return;
+            using (var fileStream = new FileStream(saveFilePath, FileMode.Open, FileAccess.ReadWrite))
             {
                 IWorkbook workbook = new HSSFWorkbook(fileStream);
                 ICellStyle style = MergetStyle(workbook);
@@ -106,44 +105,29 @@ namespace TdqqClient.Services.Export.ExportSingle
                 var mjSum = 0.0;
                 int start_row_index = 14;
                 int row_gap = 1;
-                for (int i = 0; i < dtCbdk.Rows.Count; i++)
+                for (int i = 0; i < fields.Count; i++)
                 {
                     //填写四至
                     StringBuilder sz = new StringBuilder();
-                    sz.Append("东：" + EditSz(dtCbdk.Rows[i][4].ToString().Trim()) + "\n");
-                    sz.Append("南：" + EditSz(dtCbdk.Rows[i][5].ToString().Trim()) + "\n");
-                    sz.Append("西：" + EditSz(dtCbdk.Rows[i][6].ToString().Trim()) + "\n");
-                    sz.Append("北：" + EditSz(dtCbdk.Rows[i][7].ToString().Trim()) + "\n");
+                    sz.Append("东：" + EditSz(fields[i].Dkdz) + "\n");
+                    sz.Append("南：" + EditSz(fields[i].Dknz) + "\n");
+                    sz.Append("西：" + EditSz(fields[i].Dkxz) + "\n");
+                    sz.Append("北：" + EditSz(fields[i].Dkbz) + "\n");
                     ICell cell;
                     //填写地块名称
                     cell = sheet.GetRow(start_row_index).GetCell(0);
                     //cell.CellStyle = style;
-                    cell.SetCellValue(dtCbdk.Rows[i][1].ToString());
+                    cell.SetCellValue(fields[i].Dkmc);
                     //填写地块编码
                     cell = sheet.GetRow(start_row_index).GetCell(1);
                     // cell.CellStyle = style;
-                    cell.SetCellValue(dtCbdk.Rows[i][3].ToString().Trim().Substring(14, 5));
+                    cell.SetCellValue(fields[i].Dkbm.Substring(14, 5));
 
                     cell = sheet.GetRow(start_row_index).GetCell(2);
                     cell.SetCellValue(sz.ToString());
                     //保留有效位数
-                    double htmj, scmj;
-                    if (string.IsNullOrEmpty(dtCbdk.Rows[i][16].ToString()))
-                    {
-                        htmj = 0.0;
-                    }
-                    else
-                    {
-                        htmj = Convert.ToDouble(double.Parse(dtCbdk.Rows[i][16].ToString()).ToString("f"));
-                    }
-                    if (string.IsNullOrEmpty(dtCbdk.Rows[i][17].ToString()))
-                    {
-                        scmj = 0.0;
-                    }
-                    else
-                    {
-                        scmj = Convert.ToDouble(double.Parse(dtCbdk.Rows[i][17].ToString()).ToString("f"));
-                    }
+                    double htmj = fields[i].Htmj;
+                    double scmj=fields[i].Scmj;                    
                     mjSum += scmj;
                     //填写合同面积
                     cell = sheet.GetRow(start_row_index).GetCell(4);
@@ -156,23 +140,23 @@ namespace TdqqClient.Services.Export.ExportSingle
                     //土地用途
                     cell = sheet.GetRow(start_row_index).GetCell(6);
                     //    cell.CellStyle = style;
-                    cell.SetCellValue(Transcode.CodeToTdyt(dtCbdk.Rows[i][13].ToString()));
+                    cell.SetCellValue(Transcode.CodeToTdyt(fields[i].Tdyt));
                     //地力等级
                     cell = sheet.GetRow(start_row_index).GetCell(7);
                     //    cell.CellStyle = style;
-                    cell.SetCellValue(Transcode.CodeToDldj(dtCbdk.Rows[i][12].ToString()));
+                    cell.SetCellValue(Transcode.CodeToDldj(fields[i].Dldj));
                     //土地备注
                     cell = sheet.GetRow(start_row_index).GetCell(8);
                     //    cell.CellStyle = style;
-                    var dkbz = string.IsNullOrEmpty(dtCbdk.Rows[i][8].ToString().Trim())
+                    var dkbz = string.IsNullOrEmpty(fields[i].Dkbz)
                         ? "/"
-                        : dtCbdk.Rows[i][8].ToString().Trim();
+                        : fields[i].Dkbz;
                     cell.SetCellValue(dkbz);
                     start_row_index += row_gap;
                 }
                 //添加承包地块信息
                 rowSource = (HSSFRow)sheet.GetRow(11);
-                rowSource.GetCell(3).SetCellValue(dtCbdk.Rows.Count + "块");
+                rowSource.GetCell(3).SetCellValue(fields.Count + "块");
                 rowSource.GetCell(4).SetCellValue(mjSum.ToString("f") + "亩");
                 EditExcel(workbook, start_row_index, 0);
                 FileStream fs = new FileStream(saveFilePath, FileMode.Create, FileAccess.Write);

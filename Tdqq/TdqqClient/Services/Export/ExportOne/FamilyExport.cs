@@ -100,18 +100,27 @@ namespace TdqqClient.Services.Export.ExportOne
         }
         private void FillOneFamily(IWorkbook workbook, string cbfbm, ref int endRow, out int familyCount)
         {
-            var cbfJtcys = Cbfjtcys(cbfbm);
-            familyCount = cbfJtcys.Count;
-            ISheet sheet = workbook.GetSheetAt(0);
-            for (int i = 0; i < familyCount; i++)
+           
+                var cbfJtcys = Cbfjtcys(cbfbm);
+            if (cbfJtcys==null)
             {
-                IRow row = sheet.GetRow(endRow + i);
-                row.GetCell(3).SetCellValue(cbfJtcys[i].Cyxm);
-                row.GetCell(4).SetCellValue(cbfJtcys[i].Cyzjhm);
-                row.GetCell(5).SetCellValue(Transcode.CodeToRelationship(cbfJtcys[i].Yhzgx));
-                //endRow++;
+                familyCount = 0;
+                return;
             }
-            endRow = endRow + familyCount - 1;
+                familyCount = cbfJtcys.Count;
+               
+                ISheet sheet = workbook.GetSheetAt(0);
+                for (int i = 0; i < familyCount; i++)
+                {
+                    IRow row = sheet.GetRow(endRow + i);
+                    row.GetCell(3).SetCellValue(cbfJtcys[i].Cyxm);
+                    row.GetCell(4).SetCellValue(cbfJtcys[i].Cyzjhm);
+                    row.GetCell(5).SetCellValue(Transcode.CodeToRelationship(cbfJtcys[i].Yhzgx));
+                    //endRow++;
+                }
+                endRow = endRow + familyCount - 1;
+            
+            
         }
 
         private void EditExcel(IWorkbook workbook, int endRow, int sheetIndex)

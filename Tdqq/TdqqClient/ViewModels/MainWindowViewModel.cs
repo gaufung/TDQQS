@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows;
@@ -16,11 +15,13 @@ using ESRI.ArcGIS.Geometry;
 using ESRI.ArcGIS.Geoprocessor;
 using TdqqClient.Commands;
 using TdqqClient.Models.Edit;
-using TdqqClient.Models.Export.ExportOne;
+using TdqqClient.Models.Export;
 using TdqqClient.Models.Export.ExportTotal;
 using TdqqClient.Services.AE;
 using TdqqClient.Services.Check;
 using TdqqClient.Services.Common;
+using TdqqClient.Services.Export.ExportSingle;
+using TdqqClient.Services.Export.ExportTotal;
 using TdqqClient.Services.Import;
 using TdqqClient.Views;
 using MessageBox = System.Windows.Forms.MessageBox;
@@ -833,8 +834,8 @@ namespace TdqqClient.ViewModels
 
         private void ExportD(object parameter)
         {
-            DExport export=new DExport(_personDatabase,_selectFeauture,_basicDatabase);
-            export.Export(parameter);
+            var export = new Services.Export.ExportOne.DExport(_personDatabase, _selectFeauture, _basicDatabase);
+            export.Export();
         }
 
         /// <summary>
@@ -844,8 +845,8 @@ namespace TdqqClient.ViewModels
 
         private void ExportFamily(object parameter)
         {
-            FamilyExport export=new FamilyExport(_personDatabase,_selectFeauture,_basicDatabase);
-            export.Export(parameter);
+            var export = new Services.Export.ExportOne.FamilyExport(_personDatabase, _selectFeauture, _basicDatabase);
+            export.Export();
         }
         /// <summary>
         /// 导出公示表
@@ -854,8 +855,8 @@ namespace TdqqClient.ViewModels
 
         private void ExportOpen(object parameter)
         {
-            OpenExport export=new OpenExport(_personDatabase,_selectFeauture,_basicDatabase);
-            export.Export(parameter);
+            var export = new Services.Export.ExportOne.OpenExport(_personDatabase, _selectFeauture, _basicDatabase);
+            export.Export();
         }
         /// <summary>
         /// 导出签字表
@@ -864,8 +865,8 @@ namespace TdqqClient.ViewModels
 
         private void ExportSign(object parameter)
         {
-            SignExport export=new SignExport(_personDatabase,_selectFeauture,_basicDatabase);
-            export.Export(parameter);
+            var export = new Services.Export.ExportOne.SignExport(_personDatabase, _selectFeauture, _basicDatabase);
+            export.Export();
         }
 
         
@@ -876,8 +877,8 @@ namespace TdqqClient.ViewModels
 
         private void ExportList(object parameter)
         {
-            ListExport export=new ListExport(_personDatabase,_selectFeauture,_basicDatabase);
-            export.Export(parameter);
+            var export = new Services.Export.ExportOne.ListExport(_personDatabase, _selectFeauture, _basicDatabase);
+            export.Export();
         }
         /// <summary>
         /// 导出公示公告
@@ -905,80 +906,100 @@ namespace TdqqClient.ViewModels
 
         private void ExportJyqz(object parameter)
         {
-            JyqzsExport export=new JyqzsExport(_personDatabase,_selectFeauture,_basicDatabase);
-            export.Export();
+            TdqqClient.Services.Export.ExportBase exportBase = 
+                new TdqqClient.Services.Export.ExportSingle.JyqzExport(_personDatabase,_selectFeauture,_basicDatabase);
+            var exportoal=new ExportTotal(exportBase,false,"经营权证",_personDatabase,_selectFeauture,_basicDatabase);
+            exportoal.Export();
         }
 
         public DelegateCommand ExportConverCommand { get; set; }
 
         private void ExportCover(object parameter)
         {
-            CoversExport export=new CoversExport(_personDatabase,_selectFeauture,_basicDatabase);
-            export.Export();
+            TdqqClient.Services.Export.ExportBase exportBase =
+    new TdqqClient.Services.Export.ExportSingle.CoverExport(_personDatabase, _selectFeauture, _basicDatabase);
+            var exportoal = new ExportTotal(exportBase, false, "档案局封面", _personDatabase, _selectFeauture, _basicDatabase);
+            exportoal.Export();
         }
 
         public DelegateCommand ExportCbfCommand { get; set; }
 
         private void ExportCbf(object parameter)
         {
-            CbfsExport export=new CbfsExport(_personDatabase,_selectFeauture,_basicDatabase);
-            export.Export();
+            TdqqClient.Services.Export.ExportBase exportBase =
+     new TdqqClient.Services.Export.ExportSingle.CbfExport(_personDatabase, _selectFeauture, _basicDatabase);
+            var exportoal = new ExportTotal(exportBase, false, "承包方调查", _personDatabase, _selectFeauture, _basicDatabase);
+            exportoal.Export();
         }
 
         public DelegateCommand ExportDkCommand  { get; set; }
 
         private void ExportDk(object parameter)
         {
-            DksExport export=new DksExport(_personDatabase,_selectFeauture,_basicDatabase);
-            export.Export();
+            TdqqClient.Services.Export.ExportBase exportBase =
+     new TdqqClient.Services.Export.ExportSingle.DkExport(_personDatabase, _selectFeauture, _basicDatabase);
+            var exportoal = new ExportTotal(exportBase, false, "地块调查表", _personDatabase, _selectFeauture, _basicDatabase);
+            exportoal.Export();
         }
 
         public DelegateCommand ExportContractCommand { get; set; }
 
         private void ExportContract(object parameter)
         {
-            ContractsExport export=new ContractsExport(_personDatabase,_selectFeauture,_basicDatabase);
-            export.Export();
+            TdqqClient.Services.Export.ExportBase exportBase =
+     new TdqqClient.Services.Export.ExportSingle.ContractExport(_personDatabase, _selectFeauture, _basicDatabase);
+            var exportoal = new ExportTotal(exportBase, false, "合同书", _personDatabase, _selectFeauture, _basicDatabase);
+            exportoal.Export();
         }
 
         public DelegateCommand ExportStatementCommand { get; set; }
 
         private void ExportStatement(object parameter)
         {
-            StatementsExport export=new StatementsExport(_personDatabase,_selectFeauture,_basicDatabase);
-            export.Export();
+            TdqqClient.Services.Export.ExportBase exportBase =
+     new TdqqClient.Services.Export.ExportSingle.StatementExport(_personDatabase, _selectFeauture, _basicDatabase);
+            var exportoal = new ExportTotal(exportBase, false, "户主声明书", _personDatabase, _selectFeauture, _basicDatabase);
+            exportoal.Export();
         }
 
         public DelegateCommand ExportAcceptCommand { get; set; }
 
         private void ExportAccept(object parameter)
         {
-            AcceptsExport export=new AcceptsExport(_personDatabase,_selectFeauture,_basicDatabase);
-            export.Export();
+            TdqqClient.Services.Export.ExportBase exportBase =
+          new TdqqClient.Services.Export.ExportSingle.AcceptExport(_personDatabase, _selectFeauture, _basicDatabase);
+            var exportoal = new ExportTotal(exportBase, false, "无异议声明书", _personDatabase, _selectFeauture, _basicDatabase);
+            exportoal.Export();
         }
 
         public DelegateCommand ExportMapCommand { get; set; }
 
         private void ExportMap(object parameter)
         {
-            MapsExport export=new MapsExport(_personDatabase,_selectFeauture,_basicDatabase);
-            export.Export();
+            TdqqClient.Services.Export.ExportBase exportBase =
+    new TdqqClient.Services.Export.ExportSingle.MapExport(_personDatabase, _selectFeauture, _basicDatabase);
+            var exportoal = new ExportTotal(exportBase, true, "地块示意图", _personDatabase, _selectFeauture, _basicDatabase);
+            exportoal.Export();
         }
 
         public DelegateCommand ExportGhbCommand { get; set; }
 
         private void ExportGhb(object parameter)
         {
-            GhbsExport export=new GhbsExport(_personDatabase,_selectFeauture,_basicDatabase);
-            export.Export();
+            TdqqClient.Services.Export.ExportBase exportBase =
+     new TdqqClient.Services.Export.ExportSingle.GhbExport(_personDatabase, _selectFeauture, _basicDatabase);
+            var exportoal = new ExportTotal(exportBase, false, "归户表", _personDatabase, _selectFeauture, _basicDatabase);
+            exportoal.Export();
         }
 
         public DelegateCommand ExportRegisterCommand { get; set; }
 
         private void ExportRegister(object parameter)
         {
-            RegistersExport export=new RegistersExport(_personDatabase,_selectFeauture,_basicDatabase);
-            export.Export();
+            TdqqClient.Services.Export.ExportBase exportBase =
+     new TdqqClient.Services.Export.ExportSingle.RegisterExport(_personDatabase, _selectFeauture, _basicDatabase);
+            var exportoal = new ExportTotal(exportBase, false, "登记薄", _personDatabase, _selectFeauture, _basicDatabase);
+            exportoal.Export();
         }
 
         public DelegateCommand ExportArchiveCommand { get; set; }

@@ -13,6 +13,7 @@ namespace TdqqClient.Models.Export.ExportSingle
     /// </summary>
     class JyqzExport:ExportBase
     {
+
         public JyqzExport(string personDatabase, string selectFeauture, string basicDatabase)
             : base(personDatabase, selectFeauture, basicDatabase)
         {   }

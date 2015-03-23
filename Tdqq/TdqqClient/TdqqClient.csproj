@@ -223,6 +223,11 @@
     <Compile Include="Services\Export\ExportSingle\CoverExport.cs" />
     <Compile Include="Services\Export\ExportSingle\DkExport.cs" />
     <Compile Include="Services\Export\ExportSingle\GhbExport.cs" />
+    <Compile Include="Services\Export\ExportSingle\JyqzExport.cs" />
+    <Compile Include="Services\Export\ExportSingle\MapExport.cs" />
+    <Compile Include="Services\Export\ExportSingle\RegisterExport.cs" />
+    <Compile Include="Services\Export\ExportSingle\StatementExport.cs" />
+    <Compile Include="Services\Export\ExportTotal\ExportTotal.cs" />
     <Compile Include="Services\Export\IExport.cs" />
     <Compile Include="Services\Import\IImport.cs" />
     <Compile Include="Models\SortEnity.cs" />

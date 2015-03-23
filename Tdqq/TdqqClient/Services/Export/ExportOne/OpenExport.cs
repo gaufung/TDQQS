@@ -97,6 +97,7 @@ namespace TdqqClient.Services.Export.ExportOne
             }
             catch (Exception e)
             {
+                MessageBox.Show(e.ToString());
                 para["ret"] = false;
             }
             finally

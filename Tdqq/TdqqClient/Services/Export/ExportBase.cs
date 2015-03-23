@@ -81,7 +81,6 @@ namespace TdqqClient.Services.Export
                 Lxdh = dt.Rows[0][6].ToString().Trim(),
                 Cbfcysl = Convert.ToInt32(dt.Rows[0][7].ToString().Trim())
             };
-
         }
         #endregion
 
@@ -95,28 +94,30 @@ namespace TdqqClient.Services.Export
         {
            _pDatabaseService=new MsAccessDatabase(BasicDatabase);
             var sqlString =
-                string.Format("Select CBFBM,CBFMC,CYXB,CYXM,CYZJHM,CYZJLX,CYBZ,YHZGX,CYSZC,YZBM,LXDH,SFGYR" +
+                string.Format("Select CBFBM,CBFMC,CYXB,CYXM,CYZJHM,CYZJLX,CYBZ,YHZGX,CYSZC,YZBM,LXDH,SFGYR " +
                               "From {0} where CBFBM='{1}' order by YHZGX", "CBF_JTCY", cbfbm);
             var dt = _pDatabaseService.Query(sqlString);
-            if (dt == null || dt.Rows.Count == 0) return null;
-            List<CbfjtcyModel> cbfjtcys=new List<CbfjtcyModel>();
-            for (int i = 0; i < dt.Rows.Count; i++)
+            List<CbfjtcyModel> cbfjtcys = new List<CbfjtcyModel>();
+            if (dt != null)
             {
-                cbfjtcys.Add(new CbfjtcyModel()
+                for (int i = 0; i < dt.Rows.Count; i++)
                 {
-                    Cbfbm = dt.Rows[i][0].ToString().Trim(),
-                    Cbfmc = dt.Rows[i][1].ToString().Trim(),
-                    Cyxb = dt.Rows[i][2].ToString().Trim(),
-                    Cyxm = dt.Rows[i][3].ToString().Trim(),
-                    Cyzjhm = dt.Rows[i][4].ToString().Trim(),
-                    Cyzjlx = dt.Rows[i][5].ToString().Trim(),
-                    Cybz = dt.Rows[i][6].ToString().Trim(),
-                    Yhzgx = dt.Rows[i][7].ToString().Trim(),
-                    Cyszc = dt.Rows[i][8].ToString().Trim(),
-                    Lxdh = dt.Rows[i][9].ToString().Trim(),
-                    Sfgyr = dt.Rows[i][10].ToString().Trim(),
-                });
-            }
+                    cbfjtcys.Add(new CbfjtcyModel()
+                    {
+                        Cbfbm = dt.Rows[i][0].ToString().Trim(),
+                        Cbfmc = dt.Rows[i][1].ToString().Trim(),
+                        Cyxb = dt.Rows[i][2].ToString().Trim(),
+                        Cyxm = dt.Rows[i][3].ToString().Trim(),
+                        Cyzjhm = dt.Rows[i][4].ToString().Trim(),
+                        Cyzjlx = dt.Rows[i][5].ToString().Trim(),
+                        Cybz = dt.Rows[i][6].ToString().Trim(),
+                        Yhzgx = dt.Rows[i][7].ToString().Trim(),
+                        Cyszc = dt.Rows[i][8].ToString().Trim(),
+                        Lxdh = dt.Rows[i][9].ToString().Trim(),
+                        Sfgyr = dt.Rows[i][10].ToString().Trim(),
+                    });
+                }
+            }                        
             _pDatabaseService = null;
             return cbfjtcys;
         }
@@ -135,7 +136,7 @@ namespace TdqqClient.Services.Export
             if (dt == null || dt.Rows.Count != 1)
             {
                 _pDatabaseService = null;
-                return null;
+                return new FbfModel();
             }
             return new FbfModel()
             {
@@ -163,7 +164,7 @@ namespace TdqqClient.Services.Export
             _pDatabaseService=new MsAccessDatabase(BasicDatabase);
             var sqlString = string.Format("Select distinct CBFDCRQ,CBFDCY,CBFDCJS,GSJS,GSJSR,GSSHRQ,GSSHR From CBF");
             var dt = _pDatabaseService.Query(sqlString);
-            if (dt == null || dt.Rows.Count == 0) return null;
+            if (dt == null || dt.Rows.Count == 0) return new DcShModel();
             _pDatabaseService = null;
             return new DcShModel()
             {
@@ -187,37 +188,38 @@ namespace TdqqClient.Services.Export
                     "Select OBJECTID,DKMC,CBFMC,DKBM,SCMJ,HTMJ,DKDZ,DKNZ,DKXZ,DKBZ,YHTMJ,DKBZXX,ZJRXM,CBFBM,SYQXZ,DKLB,DLDJ," +
                     "TDYT,SFJBNT From {0} where CBFBM='{1}'", SelectFeature, cbfbm);
             var dt = _pDatabaseService.Query(sqlString);
-            if (dt == null || dt.Rows.Count == 0) return null;
             List<FieldModel> fields=new List<FieldModel>();
-            for (int i = 0; i < dt.Rows.Count; i++)
+            if (dt!=null)
             {
-                fields.Add(new FieldModel()
+                for (int i = 0; i < dt.Rows.Count; i++)
                 {
-                    ObjectId = dt.Rows[i][0],
-                    Dkmc = dt.Rows[i][1].ToString().Trim(),
-                    Cbfmc = dt.Rows[i][2].ToString().Trim(),
-                    Dkbm = dt.Rows[i][3].ToString().Trim(),
-                    Scmj = string.IsNullOrEmpty(dt.Rows[i][4].ToString().Trim())
-                        ?0.0:Convert.ToDouble(dt.Rows[i][4].ToString().Trim()),
-                    Htmj = string.IsNullOrEmpty(dt.Rows[i][5].ToString().Trim())
-                        ? 0.0 : Convert.ToDouble(dt.Rows[i][5].ToString().Trim()),
-                    Dkdz = dt.Rows[i][6].ToString().Trim(),
-                    Dknz = dt.Rows[i][7].ToString().Trim(),
-                    Dkxz = dt.Rows[i][8].ToString().Trim(),
-                    Dkbz = dt.Rows[i][9].ToString().Trim(),
-                    Yhtmj = string.IsNullOrEmpty(dt.Rows[i][10].ToString().Trim())
-                        ? 0.0 : Convert.ToDouble(dt.Rows[i][10].ToString().Trim()),
-                    Dkbzxx = dt.Rows[i][11].ToString().Trim(),
-                    Zjrxm = dt.Rows[i][12].ToString().Trim(),
-                    Cbfbm = dt.Rows[i][13].ToString().Trim(),
-                    Syqxz = dt.Rows[i][14].ToString().Trim(),
-                    Dklb = dt.Rows[i][15].ToString().Trim(),
-                    Dldj = dt.Rows[i][16].ToString().Trim(),
-                    Tdyt = dt.Rows[i][17].ToString().Trim(),
-                    Sfjbnt = dt.Rows[i][18].ToString().Trim()
-                });
+                    fields.Add(new FieldModel()
+                    {
+                        ObjectId = dt.Rows[i][0],
+                        Dkmc = dt.Rows[i][1].ToString().Trim(),
+                        Cbfmc = dt.Rows[i][2].ToString().Trim(),
+                        Dkbm = dt.Rows[i][3].ToString().Trim(),
+                        Scmj = string.IsNullOrEmpty(dt.Rows[i][4].ToString().Trim())
+                            ? 0.0 : Convert.ToDouble(dt.Rows[i][4].ToString().Trim()),
+                        Htmj = string.IsNullOrEmpty(dt.Rows[i][5].ToString().Trim())
+                            ? 0.0 : Convert.ToDouble(dt.Rows[i][5].ToString().Trim()),
+                        Dkdz = dt.Rows[i][6].ToString().Trim(),
+                        Dknz = dt.Rows[i][7].ToString().Trim(),
+                        Dkxz = dt.Rows[i][8].ToString().Trim(),
+                        Dkbz = dt.Rows[i][9].ToString().Trim(),
+                        Yhtmj = string.IsNullOrEmpty(dt.Rows[i][10].ToString().Trim())
+                            ? 0.0 : Convert.ToDouble(dt.Rows[i][10].ToString().Trim()),
+                        Dkbzxx = dt.Rows[i][11].ToString().Trim(),
+                        Zjrxm = dt.Rows[i][12].ToString().Trim(),
+                        Cbfbm = dt.Rows[i][13].ToString().Trim(),
+                        Syqxz = dt.Rows[i][14].ToString().Trim(),
+                        Dklb = dt.Rows[i][15].ToString().Trim(),
+                        Dldj = dt.Rows[i][16].ToString().Trim(),
+                        Tdyt = dt.Rows[i][17].ToString().Trim(),
+                        Sfjbnt = dt.Rows[i][18].ToString().Trim()
+                    });
+                }
             }
-            _pDatabaseService = null;
             return fields;
         } 
         #endregion

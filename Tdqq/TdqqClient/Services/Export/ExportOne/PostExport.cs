@@ -17,18 +17,7 @@ namespace TdqqClient.Services.Export.ExportOne
         {   }
         public void Export()
         {
-            var fbfdz = GetFbfdz();
-            if (string.IsNullOrEmpty(fbfdz))
-            {
-                MessageBox.Show(null, "发包方地址错误",
-                    "错误提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-            var area = GetArea();
-            if (area == null)
-            {
-                MessageBox.Show(null, "实测面积出错",
-                    "错误提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            
             var dialogHelper = new DialogHelper();
             var folderPath = dialogHelper.OpenFolderDialog(true);
             if (string.IsNullOrEmpty(folderPath)) return;
